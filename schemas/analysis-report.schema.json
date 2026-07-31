@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bitjaru/hangeulint/schemas/analysis-report.schema.json",
+  "title": "HangeuLint analysis report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "engine_version",
+    "pack",
+    "pack_version",
+    "passed",
+    "gate",
+    "dimensions",
+    "findings",
+    "metrics",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "engine_version": {"type": "string"},
+    "pack": {"type": "string"},
+    "pack_version": {"type": "string"},
+    "passed": {"type": "boolean"},
+    "gate": {
+      "type": "object",
+      "required": [
+        "passed",
+        "errors",
+        "warnings",
+        "max_errors",
+        "max_warnings"
+      ]
+    },
+    "dimensions": {
+      "type": "object",
+      "required": [
+        "naturalness",
+        "register",
+        "task_fit",
+        "risk",
+        "fidelity"
+      ]
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rule_id",
+          "dimension",
+          "category",
+          "severity",
+          "confidence",
+          "message",
+          "evidence",
+          "evidence_ids",
+          "calibration"
+        ]
+      }
+    },
+    "metrics": {"type": "object"},
+    "limitations": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "additionalProperties": false
+}

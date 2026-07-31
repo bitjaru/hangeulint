@@ -1,0 +1,221 @@
+{
+  "schema_version": "1.0",
+  "evidence": [
+    {
+      "id": "HGL-REF-001",
+      "title": "KatFishNet: Detecting LLM-Generated Korean Text through Linguistic Feature Analysis",
+      "year": 2025,
+      "url": "https://aclanthology.org/2025.acl-long.1030/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Korean spacing, POS diversity, and comma usage can expose domain-dependent distributional differences.",
+        "Korean-specific signals should not be replaced by English-only heuristics."
+      ],
+      "limitations": [
+        "The task is authorship detection, not writing-quality evaluation.",
+        "Signals vary by genre and must not become unconditional lint failures.",
+        "The linked research repository did not declare a machine-readable license when reviewed."
+      ],
+      "artifact_license": "paper CC-BY-4.0; linked code/data not vendored"
+    },
+    {
+      "id": "HGL-REF-002",
+      "title": "StyleKQC: A Style-Variant Paraphrase Corpus for Korean Questions and Commands",
+      "year": 2022,
+      "url": "https://aclanthology.org/2022.lrec-1.771/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Korean directive rewriting must preserve core intent while controlling formality.",
+        "Style conversion is task- and speech-act-dependent."
+      ],
+      "limitations": [
+        "The corpus focuses on questions and commands in six daily-life topics.",
+        "The linked dataset repository did not declare a machine-readable license when reviewed."
+      ],
+      "artifact_license": "paper CC-BY-4.0; linked data not vendored"
+    },
+    {
+      "id": "HGL-REF-003",
+      "title": "Kosmic: Korean Text Similarity Metric Reflecting Honorific Distinctions",
+      "year": 2024,
+      "url": "https://aclanthology.org/2024.lrec-main.870/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Semantic similarity alone misses Korean honorific and tone differences.",
+        "Meaning and register should be evaluated as separate dimensions."
+      ],
+      "limitations": [
+        "The benchmark has 1,000 annotated pairs and does not cover every channel or organization."
+      ],
+      "artifact_license": "paper CC-BY-NC-4.0; model/data not vendored"
+    },
+    {
+      "id": "HGL-REF-004",
+      "title": "Revisiting the Concept of Translationese based on Corpus Analysis",
+      "year": 2016,
+      "url": "https://doi.org/10.15749/jts.2016.17.1.007",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Expressions called translationese can also occur in non-translated Korean.",
+        "Translationese labels require contextual and corpus-based interpretation."
+      ],
+      "limitations": [
+        "The study analyzes two English prepositions in Korean news-magazine corpora."
+      ],
+      "artifact_license": "citation only"
+    },
+    {
+      "id": "HGL-REF-005",
+      "title": "Translationese Features as Indicators of Quality in English-Russian Human Translation",
+      "year": 2019,
+      "url": "https://aclanthology.org/W19-8706/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Translatedness signals are not automatically writing-quality signals.",
+        "Authorship or provenance classification must be separated from quality evaluation."
+      ],
+      "limitations": [
+        "The language pair is English-Russian, so the finding is used as a methodological warning, not a Korean threshold."
+      ],
+      "artifact_license": "paper ACL Anthology terms; no artifacts vendored"
+    },
+    {
+      "id": "HGL-REF-006",
+      "title": "TRUE: Re-evaluating Factual Consistency Evaluation",
+      "year": 2022,
+      "url": "https://aclanthology.org/2022.naacl-main.287/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Factual consistency metrics need example-level evaluation across tasks.",
+        "NLI and QA-based approaches provide complementary semantic signals."
+      ],
+      "limitations": [
+        "The evaluated datasets are not a Korean rewriting benchmark.",
+        "Model-based evaluators remain optional until Korean calibration is complete."
+      ],
+      "artifact_license": "paper CC-BY-4.0; no artifacts vendored"
+    },
+    {
+      "id": "HGL-REF-007",
+      "title": "Localizing Factual Inconsistencies in Attributable Text Generation",
+      "year": 2026,
+      "url": "https://aclanthology.org/2026.tacl-1.6/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Consistency errors should be localized to small predicate-argument claims.",
+        "A single opaque semantic score is less actionable than localized evidence."
+      ],
+      "limitations": [
+        "The automatic methods require model evaluation beyond the deterministic core."
+      ],
+      "artifact_license": "paper CC-BY-4.0; no artifacts vendored"
+    },
+    {
+      "id": "HGL-REF-008",
+      "title": "Benchmarking Linguistic Diversity of Large Language Models",
+      "year": 2025,
+      "url": "https://aclanthology.org/2025.tacl-1.69/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Lexical, syntactic, and semantic diversity are distinct dimensions.",
+        "Diversity is best evaluated over a corpus or batch, not inferred from one short text."
+      ],
+      "limitations": [
+        "The experiments focus on story generation and are not Korean-specific."
+      ],
+      "artifact_license": "paper CC-BY-4.0; no artifacts vendored"
+    },
+    {
+      "id": "HGL-REF-009",
+      "title": "Judging the Judges: A Systematic Study of Position Bias in LLM-as-a-Judge",
+      "year": 2025,
+      "url": "https://aclanthology.org/2025.ijcnlp-long.18/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "LLM judges exhibit systematic position bias that varies by judge and task.",
+        "Judge outputs require repetition, position-swap, and human calibration checks."
+      ],
+      "limitations": [
+        "The benchmark is not specific to Korean style evaluation."
+      ],
+      "artifact_license": "paper CC-BY-4.0; no artifacts vendored"
+    },
+    {
+      "id": "HGL-REF-010",
+      "title": "XDAC: XAI-Driven Detection and Attribution of LLM-Generated News Comments in Korean",
+      "year": 2025,
+      "url": "https://aclanthology.org/2025.acl-long.1108/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Short-form Korean needs domain-specific token and character signals.",
+        "Explanations should attribute which local signals affected a result."
+      ],
+      "limitations": [
+        "The task is news-comment authorship detection, not output quality.",
+        "Reported detection performance must not be reused as a HangeuLint claim."
+      ],
+      "artifact_license": "paper CC-BY-4.0; no artifacts vendored"
+    },
+    {
+      "id": "HGL-REF-011",
+      "title": "Unsupervised Detection of LLM-Generated Text in Korean Using Syntactic and Semantic Cues",
+      "year": 2026,
+      "url": "https://aclanthology.org/2026.findings-eacl.77/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Korean generated-text signals can combine syntactic and semantic layers.",
+        "Evaluation must cover multiple domains and model families."
+      ],
+      "limitations": [
+        "The task is authorship detection, not naturalness or task fitness.",
+        "The linked repository did not declare a machine-readable license when reviewed."
+      ],
+      "artifact_license": "paper CC-BY-4.0; linked code/data not vendored"
+    },
+    {
+      "id": "HGL-REF-012",
+      "title": "A Testset for Context-Aware LLM Translation in Korean-to-English Discourse Level Translation",
+      "year": 2025,
+      "url": "https://aclanthology.org/2025.coling-main.110/",
+      "basis": "peer-reviewed-paper",
+      "supports": [
+        "Lexical ambiguity, zero anaphora, slang, idiom, figurative language, and implicature require discourse context.",
+        "Sentence-only evaluation cannot cover all pragmatic meaning changes."
+      ],
+      "limitations": [
+        "The translation direction is Korean-to-English, not Korean rewriting."
+      ],
+      "artifact_license": "paper CC-BY-4.0; no artifacts vendored"
+    },
+    {
+      "id": "HGL-TOOL-001",
+      "title": "Kiwipiepy: Python API for Kiwi",
+      "year": 2026,
+      "url": "https://github.com/bab2min/kiwipiepy",
+      "basis": "official-tooling",
+      "supports": [
+        "Optional Korean morphological tokenization and POS telemetry."
+      ],
+      "limitations": [
+        "Optional dependency only; its outputs are not calibrated quality thresholds.",
+        "The library is not bundled with HangeuLint Core."
+      ],
+      "artifact_license": "LGPL; separately installed dependency"
+    },
+    {
+      "id": "HGL-PILOT-001",
+      "title": "HangeuLint clean-room starter heuristics",
+      "year": 2026,
+      "url": "https://github.com/bitjaru/hangeulint/tree/main/benchmarks",
+      "basis": "project-pilot",
+      "supports": [
+        "Starter rules provide explainable regression checks for known Korean editing failures."
+      ],
+      "limitations": [
+        "Fixtures are hand-authored regression cases, not a representative benchmark.",
+        "No accuracy or AI-authorship claim may be made from these fixtures."
+      ],
+      "artifact_license": "Apache-2.0"
+    }
+  ]
+}

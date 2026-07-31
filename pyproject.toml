@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hangeulint"
+version = "0.1.0"
+description = "ESLint for Korean AI output"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [
+  {name = "HangeuLint contributors"}
+]
+keywords = [
+  "korean",
+  "llm",
+  "lint",
+  "ai-output",
+  "natural-language"
+]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Natural Language :: Korean",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12"
+]
+
+[project.optional-dependencies]
+morphology = ["kiwipiepy>=0.23,<0.24"]
+
+[project.scripts]
+hangeulint = "hangeulint.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+hangeulint = ["packs/*.json", "references/*.json"]
+
+[tool.unittest]
+start-directory = "tests"

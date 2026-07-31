@@ -1,0 +1,96 @@
+{
+  "id": "social",
+  "display_name": "Social",
+  "version": "0.2.0",
+  "gate": {
+    "max_errors": 0,
+    "max_warnings": 2
+  },
+  "ignored_section_prefixes": [
+    "[첨부 제안]",
+    "[📎 첨부 제안]",
+    "_HangeuLint"
+  ],
+  "rules": [
+    {
+      "id": "social.fragmented-lines",
+      "kind": "short_line_ratio",
+      "dimension": "task_fit",
+      "category": "layout-rhythm",
+      "severity": "error",
+      "confidence": "high",
+      "message": "짧은 줄이 연속되어 본문이 카드뉴스처럼 끊깁니다.",
+      "suggestion": "의도된 시나 카피가 아니라면 문장과 의미 단위로 연결하세요.",
+      "options": {
+        "min_lines": 4,
+        "max_compact_chars": 18,
+        "ratio": 0.7
+      },
+      "evidence_ids": ["HGL-PILOT-001"],
+      "calibration": "social-clean-room-starter",
+      "examples": {
+        "fail": "새롭습니다\n빠릅니다\n놀랍습니다\n달라집니다",
+        "pass": "이번 업데이트에서는 반복 작업을 줄였습니다. 문서를 열 때마다 같은 설정을 다시 고르지 않아도 됩니다."
+      }
+    },
+    {
+      "id": "social.clickbait-hook",
+      "kind": "regex",
+      "dimension": "task_fit",
+      "category": "reader-contract",
+      "severity": "warning",
+      "confidence": "medium",
+      "pattern": "(아직도 .* 모르|이유가 뭘까\\?|놀라운 사실|단 \\d+일 만에|끝까지 보면)",
+      "message": "내용보다 반응을 먼저 요구하는 문구가 있습니다.",
+      "suggestion": "궁금증을 연출하기 전에 독자가 얻을 사실을 먼저 쓰세요.",
+      "evidence_ids": ["HGL-PILOT-001"],
+      "calibration": "social-clean-room-starter",
+      "examples": {
+        "fail": "아직도 이 기능을 모르시나요? 끝까지 보면 놀라운 사실을 알게 됩니다.",
+        "pass": "이번 버전부터 영수증을 PDF로 바로 내려받을 수 있습니다."
+      }
+    },
+    {
+      "id": "social.abstract-brand-density",
+      "kind": "term_density",
+      "dimension": "task_fit",
+      "category": "specificity",
+      "severity": "warning",
+      "confidence": "medium",
+      "message": "추상적인 브랜드 어휘가 한 구간에 몰려 있습니다.",
+      "suggestion": "감각어 일부를 실제 장면, 제품 특징, 행동으로 바꾸세요.",
+      "options": {
+        "terms": ["본질", "감도", "완성도", "헤리티지", "안목", "무드", "가치", "경험"],
+        "characters": 500,
+        "count": 5
+      },
+      "evidence_ids": ["HGL-PILOT-001"],
+      "calibration": "social-clean-room-starter; density-not-ban",
+      "examples": {
+        "fail": "브랜드의 본질과 감도, 헤리티지와 안목, 그리고 완성도 높은 경험을 전합니다.",
+        "pass": "무광 금속 프레임과 낮은 채도의 가죽을 함께 썼습니다."
+      }
+    },
+    {
+      "id": "social.uniform-endings",
+      "kind": "repeated_ending",
+      "dimension": "naturalness",
+      "category": "rhythm",
+      "severity": "warning",
+      "confidence": "medium",
+      "message": "같은 종결어미가 이어져 리듬이 단조롭습니다.",
+      "suggestion": "문장 길이와 종결 방식을 의미에 맞게 조정하세요.",
+      "options": {
+        "min_sentences": 4,
+        "ratio": 0.75,
+        "suffixes": ["습니다", "입니다", "합니다", "됩니다", "어요", "예요", "죠", "다"]
+      },
+      "evidence_ids": ["HGL-PILOT-001"],
+      "calibration": "social-clean-room-starter",
+      "examples": {
+        "fail": "기능이 추가됐습니다. 속도가 빨라졌습니다. 화면이 바뀌었습니다. 오류가 줄었습니다.",
+        "pass": "기능을 하나 추가했고 화면도 정리했습니다. 속도는 그대로지만 오류가 줄었습니다."
+      }
+    }
+  ]
+}

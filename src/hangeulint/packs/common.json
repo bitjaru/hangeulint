@@ -1,0 +1,114 @@
+{
+  "id": "common",
+  "version": "0.2.0",
+  "rules": [
+    {
+      "id": "common.purpose-clause-density",
+      "kind": "regex",
+      "dimension": "naturalness",
+      "category": "translationese",
+      "severity": "warning",
+      "confidence": "medium",
+      "pattern": "(위해서|하기 위하여|할 수 있도록 지원(?:합니다|한다))",
+      "message": "목적 표현이 길어 주행동이 흐려질 수 있습니다.",
+      "suggestion": "주체와 주행동을 먼저 쓰고 필요한 목적만 남기세요.",
+      "evidence_ids": ["HGL-REF-004", "HGL-REF-005", "HGL-PILOT-001"],
+      "calibration": "clean-room-starter; context-required",
+      "examples": {
+        "fail": "고객이 더 쉽게 사용할 수 있도록 지원하기 위하여 기능을 개선했습니다.",
+        "pass": "고객이 더 쉽게 쓰도록 입력 단계를 줄였습니다."
+      }
+    },
+    {
+      "id": "common.inflated-significance",
+      "kind": "regex",
+      "dimension": "task_fit",
+      "category": "unsupported-emphasis",
+      "severity": "warning",
+      "confidence": "medium",
+      "pattern": "(시사하는 바가 (?:매우 )?크다|중요한 전환점|새로운 패러다임|혁신적인 도약)",
+      "message": "변경 사실보다 의미를 크게 선언하는 표현이 있습니다.",
+      "suggestion": "무엇이 실제로 달라졌는지 먼저 쓰고 근거 없는 평가는 덜어내세요.",
+      "evidence_ids": ["HGL-PILOT-001"],
+      "calibration": "clean-room-starter",
+      "examples": {
+        "fail": "이번 업데이트는 업무 혁신의 중요한 전환점입니다.",
+        "pass": "이번 업데이트로 승인 단계를 세 번에서 두 번으로 줄였습니다."
+      }
+    },
+    {
+      "id": "common.conclusion-stamp",
+      "kind": "regex",
+      "dimension": "naturalness",
+      "category": "discourse",
+      "severity": "info",
+      "confidence": "low",
+      "pattern": "^(결론적으로|종합적으로|요약하자면)[,，]?",
+      "message": "정형화된 결론 표지가 있습니다.",
+      "suggestion": "긴 글의 실제 요약이 아니라면 결론을 바로 써도 되는지 확인하세요.",
+      "evidence_ids": ["HGL-PILOT-001"],
+      "calibration": "clean-room-starter; advisory-only",
+      "examples": {
+        "fail": "결론적으로, 이 기능은 매우 중요합니다.",
+        "pass": "이 기능은 다음 배포에서 제외합니다."
+      }
+    },
+    {
+      "id": "common.connector-density",
+      "kind": "regex",
+      "dimension": "naturalness",
+      "category": "discourse",
+      "severity": "warning",
+      "confidence": "medium",
+      "pattern": "^(또한|따라서|그러나|나아가|더불어|즉)[,，]?",
+      "message": "문두 연결어가 짧은 구간에 반복됩니다.",
+      "suggestion": "문장 관계가 자명하면 연결어를 덜어내세요.",
+      "options": {
+        "max_occurrences": 2
+      },
+      "evidence_ids": ["HGL-PILOT-001"],
+      "calibration": "clean-room-starter",
+      "examples": {
+        "fail": "또한, 속도가 빨라졌습니다.\n따라서, 대기가 줄었습니다.\n나아가, 비용도 줄었습니다.",
+        "pass": "속도가 빨라져 대기가 줄었습니다. 운영 비용도 함께 줄었습니다."
+      }
+    },
+    {
+      "id": "common.passive-stack",
+      "kind": "regex",
+      "dimension": "naturalness",
+      "category": "syntax",
+      "severity": "warning",
+      "confidence": "high",
+      "pattern": "(되어질|되어지고|이루어지게 되|진행되게 되)",
+      "message": "피동 표현이 겹쳐 행동이나 주체가 흐립니다.",
+      "suggestion": "가능하면 행동 주체를 복원하고 피동 단계를 하나로 줄이세요.",
+      "evidence_ids": ["HGL-PILOT-001"],
+      "calibration": "clean-room-starter",
+      "examples": {
+        "fail": "검토가 진행되게 될 예정입니다.",
+        "pass": "운영팀이 내일 검토합니다."
+      }
+    },
+    {
+      "id": "common.register-mix",
+      "kind": "register_mix",
+      "dimension": "register",
+      "category": "ending-consistency",
+      "severity": "warning",
+      "confidence": "medium",
+      "message": "한 문서에서 격식 단계가 여러 차례 바뀝니다.",
+      "suggestion": "인용이나 의도된 전환이 아니라면 독자 관계에 맞는 종결 방식으로 맞추세요.",
+      "options": {
+        "min_recognized": 4,
+        "min_minor": 2
+      },
+      "evidence_ids": ["HGL-REF-002", "HGL-REF-003"],
+      "calibration": "conservative-surface-proxy",
+      "examples": {
+        "fail": "자료를 확인했습니다. 문제는 없어요. 내일 배포합니다. 궁금하면 말해요.",
+        "pass": "자료를 확인했습니다. 문제는 없습니다. 내일 배포하겠습니다. 궁금한 점은 알려 주세요."
+      }
+    }
+  ]
+}

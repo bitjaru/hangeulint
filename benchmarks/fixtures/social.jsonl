@@ -1,0 +1,6 @@
+{"id":"social-fragmented","pack":"social","expected_pass":false,"text":"이 서비스는\n새롭습니다\n빠릅니다\n놀랍습니다\n달라집니다"}
+{"id":"social-natural","pack":"social","expected_pass":true,"text":"이번 업데이트에서는 반복 작업을 줄였습니다. 문서를 열 때마다 같은 설정을 다시 고르지 않아도 됩니다.\n\n팀에서 먼저 일주일 동안 써보고 불편한 부분을 고치겠습니다."}
+{"id":"social-attachment-exception","pack":"social","expected_pass":true,"text":"이번 컬러는 한 번에 눈에 들어오기보다 볼수록 맑아 보여요.\n\n[📎 첨부 제안]\n유형: 이미지\n추천 컷: 착용 컷\n이유: 실제 크기를 보여주기 좋음"}
+{"id":"social-inflated","pack":"social","expected_pass":true,"text":"이번 발표는 새로운 패러다임입니다. 실제 변경 범위와 적용 일정은 다음 주에 공개합니다."}
+{"id":"work-stacked-honorific","pack":"work-message","expected_pass":false,"text":"자료 확인 가능하실 수 있을까요? 오늘 오후 3시 전까지 의견을 주시면 반영하겠습니다."}
+{"id":"work-direct","pack":"work-message","expected_pass":true,"text":"초안에서 가격 표기를 수정했습니다. 오늘 오후 3시까지 확인해 주세요. 의견이 없으면 이 버전으로 발행하겠습니다."}

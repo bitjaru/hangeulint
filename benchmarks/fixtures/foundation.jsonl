@@ -1,0 +1,5 @@
+{"id":"register-mixed","pack":"work-message","expected_pass":true,"expected_rules":["common.register-mix"],"text":"자료를 확인했습니다. 문제는 없어요. 내일 배포합니다. 궁금하면 말해요."}
+{"id":"register-consistent","pack":"work-message","expected_pass":true,"forbidden_rules":["common.register-mix"],"text":"자료를 확인했습니다. 문제는 없습니다. 내일 배포하겠습니다. 궁금한 점은 알려 주세요."}
+{"id":"connector-density","pack":"work-message","expected_pass":true,"expected_rules":["common.connector-density"],"text":"또한, 표를 고쳤습니다.\n따라서, 다시 검토합니다.\n나아가, 링크도 확인합니다."}
+{"id":"short-poem-like-social","pack":"social","expected_pass":false,"expected_rules":["social.fragmented-lines"],"text":"바람이 불고\n문이 열리고\n마음이 가고\n밤이 옵니다"}
+{"id":"abstract-density-threshold","pack":"social","expected_pass":true,"expected_rules":["social.abstract-brand-density"],"text":"본질과 감도, 완성도와 헤리티지, 안목과 무드가 만드는 경험을 이야기합니다."}

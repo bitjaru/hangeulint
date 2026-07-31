@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bitjaru/hangeulint/schemas/pack.schema.json",
+  "title": "HangeuLint type pack",
+  "type": "object",
+  "required": ["id", "version", "rules"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "display_name": {"type": "string"},
+    "version": {"type": "string"},
+    "gate": {
+      "type": "object",
+      "properties": {
+        "max_errors": {"type": "integer", "minimum": 0},
+        "max_warnings": {"type": "integer", "minimum": 0}
+      }
+    },
+    "ignored_section_prefixes": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "dimension",
+          "category",
+          "severity",
+          "confidence",
+          "message",
+          "evidence_ids",
+          "calibration",
+          "examples"
+        ],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "dimension": {
+            "enum": ["naturalness", "register", "task_fit", "risk"]
+          },
+          "severity": {"enum": ["error", "warning", "info"]},
+          "confidence": {"enum": ["high", "medium", "low"]},
+          "evidence_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string"}
+          },
+          "examples": {
+            "type": "object",
+            "required": ["fail", "pass"],
+            "properties": {
+              "fail": {"type": "string", "minLength": 1},
+              "pass": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  }
+}

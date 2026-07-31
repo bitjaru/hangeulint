@@ -1,0 +1,87 @@
+{
+  "id": "work-message",
+  "display_name": "Work message",
+  "version": "0.2.0",
+  "gate": {
+    "max_errors": 0,
+    "max_warnings": 2
+  },
+  "ignored_section_prefixes": [],
+  "rules": [
+    {
+      "id": "work-message.stacked-honorific",
+      "kind": "regex",
+      "dimension": "register",
+      "category": "honorific",
+      "severity": "error",
+      "confidence": "high",
+      "pattern": "(해주실 수 있으실까요|말씀드려도 괜찮으실까요|확인 가능하실 수 있을까요)",
+      "message": "경어 표현이 겹쳐 요청이 부자연스럽습니다.",
+      "suggestion": "요청 내용은 유지하고 경어 단계를 하나로 줄이세요.",
+      "evidence_ids": ["HGL-REF-002", "HGL-REF-003", "HGL-PILOT-001"],
+      "calibration": "work-message-clean-room-starter",
+      "examples": {
+        "fail": "자료 확인 가능하실 수 있을까요?",
+        "pass": "자료를 확인해 주실 수 있을까요?"
+      }
+    },
+    {
+      "id": "work-message.vague-agency",
+      "kind": "regex",
+      "dimension": "task_fit",
+      "category": "actionability",
+      "severity": "warning",
+      "confidence": "medium",
+      "pattern": "(검토가 필요할 것 같습니다|진행될 예정입니다|논의가 필요해 보입니다)",
+      "message": "다음 행동의 주체나 시점이 분명하지 않습니다.",
+      "suggestion": "확인된 범위에서 담당자, 행동, 기한을 명시하세요.",
+      "evidence_ids": ["HGL-PILOT-001"],
+      "calibration": "work-message-clean-room-starter",
+      "examples": {
+        "fail": "이 안건은 추가 검토가 필요할 것 같습니다.",
+        "pass": "제품팀이 금요일까지 이 안건을 다시 검토합니다."
+      }
+    },
+    {
+      "id": "work-message.repeated-request",
+      "kind": "regex",
+      "dimension": "task_fit",
+      "category": "request-clarity",
+      "severity": "warning",
+      "confidence": "medium",
+      "pattern": "부탁드립니다",
+      "message": "같은 요청 표현이 반복됩니다.",
+      "suggestion": "마지막 요청 한 번만 남기고 앞 문장은 행동 중심으로 쓰세요.",
+      "options": {
+        "max_occurrences": 1
+      },
+      "evidence_ids": ["HGL-REF-002", "HGL-PILOT-001"],
+      "calibration": "work-message-clean-room-starter",
+      "examples": {
+        "fail": "자료 전달 부탁드립니다. 확인 부탁드립니다. 회신 부탁드립니다.",
+        "pass": "자료를 보내 주시면 확인한 뒤 오늘 안에 회신하겠습니다."
+      }
+    },
+    {
+      "id": "work-message.uniform-endings",
+      "kind": "repeated_ending",
+      "dimension": "naturalness",
+      "category": "rhythm",
+      "severity": "warning",
+      "confidence": "medium",
+      "message": "같은 종결어미가 이어져 문장 기능이 구분되지 않습니다.",
+      "suggestion": "설명·요청·결론의 호흡에 맞춰 문장을 합치거나 나누세요.",
+      "options": {
+        "min_sentences": 4,
+        "ratio": 0.75,
+        "suffixes": ["습니다", "입니다", "합니다", "됩니다", "어요", "예요", "죠", "다"]
+      },
+      "evidence_ids": ["HGL-PILOT-001"],
+      "calibration": "work-message-clean-room-starter",
+      "examples": {
+        "fail": "초안을 보냈습니다. 표를 고쳤습니다. 링크를 넣었습니다. 확인 부탁드립니다.",
+        "pass": "초안의 표를 고치고 링크를 넣었습니다. 오늘 오후 3시까지 확인해 주세요."
+      }
+    }
+  ]
+}
