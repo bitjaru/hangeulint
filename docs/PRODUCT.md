@@ -2,9 +2,9 @@
 
 ## 한 줄 정의
 
-HangeuLint는 한국어 humanizer가 아니라 **Korean output compiler**다. 모델이 낸
-초안을 유형별 발행 계약에 맞춰 검사하고, 바뀐 사실과 격식을 추적하며, 팀이 승인한
-정책 버전으로 통제한다.
+HangeuLint는 한국어 humanizer가 아니라 **Korean context integrity compiler**다.
+모델이 낸 초안을 유형별 발행 계약에 맞춰 검사하고, 바뀐 사실·격식·주체·사건
+관계를 추적하며, 팀이 승인한 정책 버전으로 통제한다.
 
 ## 왜 단순 재작성 SaaS로 시작하지 않는가
 
@@ -69,6 +69,8 @@ owner 승인, version promotion, rollback을 제공한다.
 
 - 한국어 유형별 블라인드 평가 protocol
 - 규칙의 근거·반례·보정 이력
+- 공개 KoContextBench와 독립된 비공개 holdout
+- 사람이 채택·거절한 KoEditTrace와 문맥 오류의 연결
 - 조직별 승인/override 데이터와 안전한 policy lifecycle
 - 모델·프롬프트·정책을 함께 재현하는 audit trail
 - 실제 편집 시간과 사실 보존으로 검증된 release gate

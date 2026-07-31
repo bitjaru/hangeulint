@@ -1,5 +1,6 @@
 import contextlib
 import io
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -54,6 +55,94 @@ class CliTests(unittest.TestCase):
                 )
         self.assertEqual(code, 2)
         self.assertIn("REVIEW  fidelity", output.getvalue())
+
+    def test_context_check_reports_inherited_zero_subject(self):
+        contract_payload = {
+            "schema_version": "0.1",
+            "contract_id": "incident-v1",
+            "task": "장애 공지",
+            "entities": [
+                {
+                    "id": "company",
+                    "label": "당사",
+                    "mentions": ["당사", "운영팀"],
+                }
+            ],
+            "events": [
+                {
+                    "id": "investigate",
+                    "actor": "company",
+                    "action_terms": ["조사"],
+                    "object_terms": ["원인"],
+                    "time_terms": ["내일까지"],
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            contract = Path(temp_dir) / "contract.json"
+            candidate = Path(temp_dir) / "candidate.txt"
+            contract.write_text(
+                json.dumps(contract_payload, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            candidate.write_text(
+                "운영팀이 오류를 확인했습니다. 원인을 조사해 내일까지 알리겠습니다.",
+                encoding="utf-8",
+            )
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                code = main(["context-check", str(contract), str(candidate), "--json"])
+        self.assertEqual(code, 0)
+        payload = json.loads(output.getvalue())
+        self.assertEqual(payload["status"], "pass")
+        self.assertEqual(
+            payload["resolved_events"][0]["actor_resolution"],
+            "inherited",
+        )
+
+    def test_context_check_strict_review_returns_two(self):
+        contract_payload = {
+            "schema_version": "0.1",
+            "contract_id": "incident-v1",
+            "task": "장애 공지",
+            "entities": [
+                {
+                    "id": "company",
+                    "label": "당사",
+                    "mentions": ["당사", "운영팀"],
+                }
+            ],
+            "events": [
+                {
+                    "id": "investigate",
+                    "actor": "company",
+                    "action_terms": ["조사"],
+                    "object_terms": ["원인"],
+                    "polarity": "affirmed",
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            contract = Path(temp_dir) / "contract.json"
+            candidate = Path(temp_dir) / "candidate.txt"
+            contract.write_text(
+                json.dumps(contract_payload, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            candidate.write_text(
+                "운영팀이 원인을 조사하지 않습니다.",
+                encoding="utf-8",
+            )
+            with contextlib.redirect_stdout(io.StringIO()):
+                code = main(
+                    [
+                        "context-check",
+                        str(contract),
+                        str(candidate),
+                        "--strict-review",
+                    ]
+                )
+        self.assertEqual(code, 2)
 
 
 if __name__ == "__main__":

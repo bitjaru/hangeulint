@@ -25,6 +25,14 @@ HangeuLint의 1차 제품 가설은 ‘AI 티를 더 잘 찾는다’가 아니�
 - 생성 모델군과 prompt version
 - 편집 소요 시간
 
+문맥 평가 예문에는 다음 정답도 추가한다.
+
+- entity와 허용 mention
+- 필수 event의 actor/action/object/polarity/time
+- 생략 주체의 올바른 선행사
+- 오류 현상 slice: actor drift, event omission, temporal drift, negation scope
+- `pass`, `review`, `fail` 정답과 판단 근거 span
+
 ## 비교군
 
 - 원 AI 초안
@@ -83,4 +91,15 @@ LLM judge는 사람 평가를 대체하지 않는다.
 - 독립된 holdout 결과
 
 `scripts/run_benchmark.py`의 fixture 일치율은 구현 회귀 전용이며 위 주장에 사용할 수
-없다.
+없다. `scripts/run_context_benchmark.py`도 동일하다.
+
+## KoContextBench 단계
+
+1. `v0 clean-room`: 알고리즘 계약을 고정하는 최소쌍. 현재 구현.
+2. `public calibration`: 재배포 가능한 한국어 자료와 직접 작성한 반례를 현상별로
+   수집한다.
+3. `human adjudication`: 원어민 3명이 actor/event/time/polarity 정답을 독립 표기한다.
+4. `private holdout`: 규칙·추출기·verifier 개발에 노출하지 않은 예문으로 릴리스를
+   막거나 허용한다.
+5. `production drift`: 고객 opt-in trace에서는 원문 정확도를 공개 benchmark와 섞지
+   않고 tenant별 override와 review 적중률만 집계한다.

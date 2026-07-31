@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bitjaru/hangeulint/schemas/edit-trace.schema.json",
+  "title": "HangeuLint KoEditTrace",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "engine_version",
+    "trace_id",
+    "source_sha256",
+    "candidate_sha256",
+    "decision",
+    "contract_id",
+    "context_finding_ids",
+    "edits",
+    "privacy",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "engine_version": {"type": "string"},
+    "trace_id": {"type": "string", "pattern": "^ket-[a-f0-9]{20}$"},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "candidate_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "decision": {
+      "enum": ["unreviewed", "accepted", "rejected", "partially_accepted"]
+    },
+    "contract_id": {"type": ["string", "null"]},
+    "context_finding_ids": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "edits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "edit_id",
+          "operation",
+          "before",
+          "after",
+          "source_span",
+          "candidate_span"
+        ],
+        "properties": {
+          "edit_id": {"type": "string", "pattern": "^edit-[0-9]{3}$"},
+          "operation": {"enum": ["replace", "delete", "insert"]},
+          "before": {"type": "string"},
+          "after": {"type": "string"},
+          "source_span": {
+            "type": "array",
+            "prefixItems": [
+              {"type": "integer", "minimum": 0},
+              {"type": "integer", "minimum": 0}
+            ],
+            "items": false
+          },
+          "candidate_span": {
+            "type": "array",
+            "prefixItems": [
+              {"type": "integer", "minimum": 0},
+              {"type": "integer", "minimum": 0}
+            ],
+            "items": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "required": [
+        "persisted_by_core",
+        "contains_full_documents",
+        "contains_changed_text"
+      ]
+    },
+    "limitations": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "additionalProperties": false
+}

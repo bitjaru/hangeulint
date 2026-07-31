@@ -1,6 +1,6 @@
 # Roadmap
 
-## 0.1 — Open-source core
+## 0.1 — Output lint foundation
 
 - [x] JSON 기반 공통·유형별 pack
 - [x] `social`, `work-message`
@@ -8,42 +8,53 @@
 - [x] 점수 없는 품질 벡터와 `not_evaluated`
 - [x] 수치·날짜·시간·URL·이메일·코드·보호 용어 fidelity gate
 - [x] 부정 표현 변화 review 신호
-- [x] 판정과 분리된 쉼표·종결·선택형 품사 텔레메트리
 - [x] CLI, JSON 출력, CI 종료 코드
-- [x] 회귀 fixture와 단위 테스트
 
-## 0.2 — KoOutputBench
+## 0.2 — Context integrity foundation
 
-- [ ] 실제 AI 초안과 한국인 최종 편집본 300쌍
-- [ ] 사람 평가 기준: 자연스러움, 격식, 의미 보존, 유형 적합성, 추가 수정시간
-- [ ] 일반 프롬프트, 공개 humanizer, HangeuLint 블라인드 비교
-- [ ] 오탐 예문과 허용 반례 공개
-- [ ] 평가자 간 합의도와 bootstrap 신뢰구간
-- [ ] 공개 가능한 성능 주장과 회귀 전용 수치 분리
+- [x] `KoContextContract` JSON schema
+- [x] entity–event–time–polarity 연결
+- [x] 같은 문단의 제한된 한국어 생략 주체 상속
+- [x] actor drift, event omission, time omission, polarity review
+- [x] 근거·실패 예제·통과 반례를 가진 context rule registry
+- [x] `KoContextBench v0` 클린룸 최소쌍
+- [x] `KoEditTrace` schema와 무저장 로컬 생성기
+- [x] context CLI와 CI gate
 
-## 0.3 — Rewrite adapter
+## 0.3 — KoContextBench calibration
 
-- [ ] OpenAI 호환 provider 인터페이스
+- [ ] `customer-reply`, `incident-notice`, `report` 현상별 300쌍
+- [ ] 생략 주체, 높임 관계, 시간, 부정 범위, 인과, 인용 귀속 slice
+- [ ] 한국어 원어민 3인 독립 annotation과 adjudication
+- [ ] 평가자 합의도, rule precision, review 적중률, 오탐률
+- [ ] 공개 calibration set과 독립된 private holdout
+- [ ] 경쟁 baseline을 가린 블라인드 비교
+
+## 0.4 — Contract extractor and semantic verifier
+
+- [ ] source/context에서 contract 후보를 만드는 provider-neutral adapter
+- [ ] 자동 추출 결과와 사람이 승인한 contract의 diff
+- [ ] predicate–argument/NLI/QA verifier 플러그인
+- [ ] provider/model/prompt/evaluator version audit
+- [ ] LLM judge 반복·위치 교환·사람 정답 보정
+- [ ] 결정론적 결과와 model-based 결과의 분리 유지
+
+## 0.5 — Rewrite adapter
+
 - [ ] finding span만 수정하는 국소 재작성
-- [ ] 재작성 후 pack·fidelity gate 재실행
-- [ ] 실패 시 원문 반환이 아닌 명시적 fail-closed 결과
+- [ ] 재작성 후 pack·fidelity·context gate 재실행
+- [ ] fail-closed 결과와 사람 검토 분기
 - [ ] 모델 호출 없이 검사만 하는 기존 경로 유지
-- [ ] judge 위치 교환·반복 안정성·provider version 기록
-
-## 0.4 — More packs
-
-- [ ] `customer-reply`
-- [ ] `report`
-- [ ] pack 상속, allowlist, 조직별 override
-- [ ] pack별 사람 평가 fixture
 
 ## Cloud private beta
 
 - [ ] OpenAI 호환 output proxy
-- [ ] 팀별 voice policy와 승인 용어
-- [ ] 사람 최종 수정에서 규칙 후보 생성
-- [ ] 승인·버전·롤백
-- [ ] 모델·프롬프트 변경 회귀 대시보드
-- [ ] Slack, Notion, CMS 연동
+- [ ] 팀별 context/voice policy와 승인 용어
+- [ ] tenant별 KoEditTrace, reviewer decision, retention control
+- [ ] 규칙·verifier 후보의 shadow evaluation
+- [ ] 승인·버전·롤백과 private holdout release gate
+- [ ] 모델·프롬프트별 품질 추적과 회귀 알림
 
-Cloud 개발은 0.2의 블라인드 평가에서 사람 수정시간 감소가 확인된 뒤 시작합니다.
+Cloud 학습 루프는 사람 수정을 곧바로 규칙이나 모델로 승격하지 않는다. tenant
+데이터는 기본적으로 tenant 안에 머물고, 전역 개선은 별도 opt-in과 클린룸 재현을
+거친다.

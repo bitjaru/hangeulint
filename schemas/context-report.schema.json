@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bitjaru/hangeulint/schemas/context-report.schema.json",
+  "title": "HangeuLint Korean context integrity report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "engine_version",
+    "contract_id",
+    "task",
+    "status",
+    "passed",
+    "requires_review",
+    "gate",
+    "findings",
+    "resolved_events",
+    "metrics",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "engine_version": {"type": "string"},
+    "contract_id": {"type": "string"},
+    "task": {"type": "string"},
+    "status": {"enum": ["pass", "review", "fail"]},
+    "passed": {"type": "boolean"},
+    "requires_review": {"type": "boolean"},
+    "gate": {
+      "type": "object",
+      "required": ["errors", "reviews", "events"],
+      "properties": {
+        "errors": {"type": "integer", "minimum": 0},
+        "reviews": {"type": "integer", "minimum": 0},
+        "events": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rule_id",
+          "dimension",
+          "severity",
+          "confidence",
+          "event_id",
+          "sentence_index",
+          "message",
+          "evidence",
+          "expected",
+          "observed",
+          "evidence_ids",
+          "calibration"
+        ]
+      }
+    },
+    "resolved_events": {"type": "array"},
+    "metrics": {"type": "object"},
+    "limitations": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "additionalProperties": false
+}

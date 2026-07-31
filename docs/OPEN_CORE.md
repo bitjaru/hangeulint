@@ -5,6 +5,8 @@
 - 결정론적 한국어 분석기
 - 공개 유형 pack과 pack 스키마
 - 원문-후보 fidelity gate
+- 명시적 KoContextContract와 결정론적 document-level verifier
+- KoEditTrace 스키마와 로컬 diff 생성기
 - CLI, SDK, CI 통합
 - 공개 fixture와 벤치마크 실행기
 - 자체 호스팅 가능한 기본 API 계약
@@ -13,6 +15,8 @@
 
 - 조직별 비공개 voice policy
 - 원문, AI 초안, 사람 최종본의 안전한 피드백 저장
+- tenant별 KoEditTrace 보존, 익명화, 접근 통제
+- 문맥 verifier 보정 데이터와 비공개 holdout
 - 규칙 후보 생성과 승인 워크플로
 - API 키, 사용량 제한, 감사 로그
 - 모델·프롬프트별 품질 추적과 회귀 알림
@@ -26,8 +30,8 @@ Cloud의 기본 요청 모드는 무저장 처리다. 원문/후보 저장, 사�
 사람이 고친 문장을 바로 자동 규칙으로 배포하지 않는다.
 
 ```text
-AI draft + human final
-  -> local/private diff
+source + AI draft + human final + context findings
+  -> local/private KoEditTrace
   -> repeated pattern candidate
   -> false-positive counterexample search
   -> owner review
@@ -47,3 +51,7 @@ AI draft + human final
 
 공개 프로젝트를 SaaS의 데모판으로 약화시키지 않습니다. 로컬과 CI에서 쓸 수 있는
 코어는 독립적으로 유용해야 합니다.
+
+공개되는 것은 trace의 **형식과 생성기**다. 고객 문서에서 실제로 생성된 trace,
+조직별 승인/거절 분포, verifier 보정값, 비공개 holdout은 고객 소유 데이터 또는
+Cloud 운영 자산으로 남는다.

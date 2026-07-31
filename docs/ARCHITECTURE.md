@@ -59,7 +59,24 @@ source facts/policy          candidate
 한국어 LLM 연구에서 유용한 집단 차이가 관찰됐지만 품질과 동일하지 않고 장르
 의존적이므로, 자체 코퍼스로 보정하기 전까지 게이트에 연결하지 않는다.
 
-### Tier 3 — 의미 evaluator
+### Tier 3a — 명시적 문맥 계약
+
+`context-check`는 호출자가 선언한 entity와 event를 후보 문서 전체에서 검사한다.
+현재 사건 노드는 다음 연결을 가진다.
+
+```text
+entity(actor) ──performs──> event(action)
+                              ├── targets ──> object term
+                              ├── occurs_by ──> time term
+                              └── polarity ──> affirmed | negated | unspecified
+```
+
+같은 문단의 제한된 앞 문장에서 명시적 주체를 찾고, 사건 문장에 주체가 없을 때만
+영형 대용 후보로 연결한다. 다른 entity가 명시적 주체이면 `actor-drift`, 선행사가
+불명확하면 `actor-unresolved`를 반환한다. 이 graph는 런타임 메모리 안에서만
+만들어지며 v0.2에는 외부 graph database가 필요 없다.
+
+### Tier 3b — 모델 기반 의미 evaluator
 
 아직 구현하지 않았다. 향후 NLI, 질문-응답 기반 일관성, 국소 명제 분해를 플러그인으로
 추가한다. 모델 결과는 다음 필드를 별도로 가져야 한다.
@@ -80,6 +97,9 @@ src/hangeulint/
 ├── analyzer.py      # pack 실행, 축별 상태, 게이트
 ├── anchors.py       # 유형별 불변식과 부정 표현 review 신호
 ├── cli.py           # 로컬·CI 인터페이스
+├── context.py       # 명시적 문맥 계약과 document-level event 연결
+├── context_rules.py # 문맥 rule registry 검증
+├── edit_trace.py    # 로컬·결정적 KoEditTrace 생성
 ├── evidence.py      # 근거 레지스트리 로더와 검증
 ├── models.py        # schema-versioned 결과 계약
 ├── packs.py         # 규칙 schema와 pack 합성
@@ -89,6 +109,7 @@ src/hangeulint/
 │   ├── social.json
 │   └── work-message.json
 └── references/
+    ├── context-rules.json
     └── evidence.json
 ```
 
@@ -109,6 +130,15 @@ src/hangeulint/
 - `pass`: 결정론적 앵커가 보존되고 검토 신호 없음
 - `review`: 앵커는 보존됐지만 부정 표현 수가 달라 사람/semantic evaluator 확인 필요
 - `fail`: 필수 앵커 누락 또는 후보에 새 앵커 추가
+
+`context-check`도 결과를 평균 점수로 압축하지 않는다.
+
+- `pass`: 계약 사건과 명시/상속 주체, 시간 앵커가 보존됨
+- `review`: 생략 주체 또는 부정 범위를 결정적으로 확정할 수 없음
+- `fail`: 필수 사건·시간이 누락되거나 명시 주체가 다른 entity로 바뀜
+
+`trace`는 원문과 후보의 hash, 변경 구간, 사람의 명시적 채택 상태, 연결된 context
+finding ID를 반환한다. Core는 trace나 전체 문서를 저장하지 않는다.
 
 ## Pack과 정책
 

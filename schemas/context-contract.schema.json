@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bitjaru/hangeulint/schemas/context-contract.schema.json",
+  "title": "HangeuLint Korean context contract",
+  "type": "object",
+  "required": ["schema_version", "contract_id", "task", "entities", "events"],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "contract_id": {"type": "string", "minLength": 1},
+    "task": {"type": "string", "minLength": 1},
+    "entities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "mentions"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "label": {"type": "string", "minLength": 1},
+          "mentions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "actor", "action_terms"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "actor": {"type": "string", "minLength": 1},
+          "action_terms": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "object_terms": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "polarity": {
+            "enum": ["affirmed", "negated", "unspecified"],
+            "default": "unspecified"
+          },
+          "time_terms": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "required": {"type": "boolean", "default": true},
+          "context_window": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5,
+            "default": 2
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

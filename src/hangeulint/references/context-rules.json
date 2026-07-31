@@ -1,0 +1,55 @@
+{
+  "schema_version": "0.1",
+  "rules": [
+    {
+      "id": "context.event-missing",
+      "severity": "error",
+      "confidence": "high",
+      "description": "계약에 required로 선언된 사건의 행위·대상 용어 결합이 후보문에 없다.",
+      "evidence_ids": ["HGL-REF-007"],
+      "failing_example": "계약: 당사가 원인을 조사한다. 후보: 당사가 오류를 확인했다.",
+      "passing_example": "계약: 당사가 원인을 조사한다. 후보: 당사가 원인을 조사한다.",
+      "calibration": "contract_deterministic"
+    },
+    {
+      "id": "context.actor-drift",
+      "severity": "error",
+      "confidence": "high",
+      "description": "사건 문장의 명시적 주체가 계약의 actor와 다른 entity다.",
+      "evidence_ids": ["HGL-REF-007", "HGL-REF-012"],
+      "failing_example": "계약 actor=당사. 후보: 고객이 원인을 조사한다.",
+      "passing_example": "계약 actor=당사. 후보: 당사가 원인을 조사한다.",
+      "calibration": "contract_deterministic"
+    },
+    {
+      "id": "context.actor-unresolved",
+      "severity": "review",
+      "confidence": "medium",
+      "description": "영형 대용으로 생략된 사건 주체의 선행사를 보수적으로 확정할 수 없다.",
+      "evidence_ids": ["HGL-REF-012"],
+      "failing_example": "고객이 오류를 제보했다. 원인을 조사한다.",
+      "passing_example": "운영팀이 오류를 확인했다. 원인을 조사한다.",
+      "calibration": "heuristic"
+    },
+    {
+      "id": "context.polarity-mismatch",
+      "severity": "review",
+      "confidence": "medium",
+      "description": "계약과 후보 사건의 표면 부정 여부가 다르며 부정 범위 검토가 필요하다.",
+      "evidence_ids": ["HGL-REF-006", "HGL-REF-007"],
+      "failing_example": "계약 polarity=affirmed. 후보: 원인을 조사하지 않는다.",
+      "passing_example": "계약 polarity=affirmed. 후보: 원인을 조사한다.",
+      "calibration": "heuristic"
+    },
+    {
+      "id": "context.time-anchor-missing",
+      "severity": "error",
+      "confidence": "high",
+      "description": "계약이 요구한 시간 표현이 사건의 제한된 문맥 창에 없다.",
+      "evidence_ids": ["HGL-REF-006", "HGL-REF-007"],
+      "failing_example": "계약 time=7월 31일까지. 후보: 원인을 조사한다.",
+      "passing_example": "계약 time=7월 31일까지. 후보: 7월 31일까지 원인을 조사한다.",
+      "calibration": "contract_deterministic"
+    }
+  ]
+}

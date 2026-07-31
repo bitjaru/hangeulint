@@ -1,0 +1,29 @@
+{
+  "schema_version": "0.1",
+  "contract_id": "customer-incident-notice-v1",
+  "task": "고객 장애 공지",
+  "entities": [
+    {
+      "id": "company",
+      "label": "당사",
+      "mentions": ["당사", "저희", "운영팀"]
+    },
+    {
+      "id": "customer",
+      "label": "고객",
+      "mentions": ["고객", "고객사"]
+    }
+  ],
+  "events": [
+    {
+      "id": "investigate-root-cause",
+      "actor": "company",
+      "action_terms": ["조사"],
+      "object_terms": ["원인"],
+      "polarity": "affirmed",
+      "time_terms": ["7월 31일까지"],
+      "required": true,
+      "context_window": 2
+    }
+  ]
+}
