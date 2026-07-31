@@ -2,10 +2,9 @@ from __future__ import annotations
 
 import re
 from collections import Counter
-from typing import Iterable
+from collections.abc import Iterable
 
 from .models import FidelityReport
-
 
 _ANCHOR_PATTERNS = (
     ("url", re.compile(r"https?://[^\s)\]}>]+")),

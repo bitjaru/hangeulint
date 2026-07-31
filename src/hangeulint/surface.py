@@ -4,7 +4,6 @@ import re
 from collections import Counter
 from typing import Any
 
-
 _SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+|\n+")
 _ENDING_PATTERNS = (
     ("formal", re.compile(r"(?:습니다|ㅂ니다|입니다|합니다|됩니다)$")),
