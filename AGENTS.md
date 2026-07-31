@@ -21,5 +21,6 @@
 ```bash
 PYTHONPATH=src python3 scripts/run_benchmark.py
 PYTHONPATH=src python3 scripts/run_context_benchmark.py
+PYTHONPATH=src python3 scripts/run_context_calibration.py
 python3 -m unittest discover -s tests -v
 ```

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bitjaru/hangeulint/schemas/context-annotation-response.schema.json",
+  "title": "HangeuLint KoContextBench annotation response",
+  "type": "object",
+  "required": ["schema_version", "package_id", "rater_id", "items"],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "package_id": {"type": "string", "minLength": 1},
+    "rater_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Use a pseudonymous reviewer ID, not a name or email."
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "annotation_id",
+          "status",
+          "finding_ids",
+          "actor_resolution",
+          "rationale"
+        ],
+        "properties": {
+          "annotation_id": {"type": "string", "minLength": 1},
+          "status": {"enum": ["pass", "review", "fail"]},
+          "finding_ids": {
+            "type": "array",
+            "items": {"type": "string"},
+            "uniqueItems": true
+          },
+          "actor_resolution": {
+            "enum": [
+              "explicit",
+              "mentioned",
+              "inherited",
+              "explicit_other",
+              "inherited_other",
+              "unresolved",
+              "missing"
+            ]
+          },
+          "rationale": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

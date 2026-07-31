@@ -1,0 +1,677 @@
+{
+  "schema_version": "0.1",
+  "dataset_id": "kocontextbench-development-seed-v0.1",
+  "release_level": "development_seed",
+  "license": "Apache-2.0",
+  "annotation_policy": {
+    "required_raters": 3,
+    "adjudication_required": true,
+    "blind_review": true,
+    "pre_registered": false,
+    "independent_holdout": false
+  },
+  "contracts": [
+    {
+      "schema_version": "0.1",
+      "contract_id": "incident-notice-v1",
+      "task": "고객 장애 공지",
+      "entities": [
+        {
+          "id": "company",
+          "label": "당사",
+          "mentions": ["당사", "운영팀"]
+        },
+        {
+          "id": "customer",
+          "label": "고객",
+          "mentions": ["고객", "고객사"]
+        }
+      ],
+      "events": [
+        {
+          "id": "investigate",
+          "actor": "company",
+          "action_terms": ["조사"],
+          "object_terms": ["원인"],
+          "polarity": "affirmed",
+          "time_terms": ["7월 31일까지"],
+          "context_window": 2
+        }
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "contract_id": "customer-refund-v1",
+      "task": "고객 환불 답변",
+      "entities": [
+        {
+          "id": "support",
+          "label": "고객지원팀",
+          "mentions": ["고객지원팀", "상담팀", "저희"]
+        },
+        {
+          "id": "customer",
+          "label": "고객",
+          "mentions": ["고객", "고객님"]
+        }
+      ],
+      "events": [
+        {
+          "id": "refund-payment",
+          "actor": "support",
+          "action_terms": ["환불"],
+          "object_terms": ["결제 금액"],
+          "polarity": "affirmed",
+          "time_terms": ["8월 2일까지"],
+          "context_window": 2
+        }
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "contract_id": "settlement-report-v1",
+      "task": "정산 오류 검토 보고",
+      "entities": [
+        {
+          "id": "audit",
+          "label": "감사팀",
+          "mentions": ["감사팀", "검토팀"]
+        },
+        {
+          "id": "vendor",
+          "label": "협력사",
+          "mentions": ["협력사", "공급사"]
+        }
+      ],
+      "events": [
+        {
+          "id": "confirm-settlement-error",
+          "actor": "audit",
+          "action_terms": ["확인"],
+          "object_terms": ["정산 오류"],
+          "polarity": "affirmed",
+          "time_terms": ["8월 5일까지"],
+          "context_window": 2
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "incident-explicit-pass",
+      "domain": "incident-notice",
+      "phenomena": ["explicit_actor"],
+      "contract_id": "incident-notice-v1",
+      "source_context": "운영팀이 장애 원인을 조사하고 7월 31일까지 고객에게 결과를 알린다.",
+      "candidate": "운영팀이 원인을 조사해 7월 31일까지 결과를 안내하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:incident-explicit-pass",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "pass",
+        "finding_ids": [],
+        "actor_resolution": "explicit"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "incident-zero-subject-pass",
+      "domain": "incident-notice",
+      "phenomena": ["zero_anaphora"],
+      "contract_id": "incident-notice-v1",
+      "source_context": "운영팀이 장애 원인을 조사하고 7월 31일까지 고객에게 결과를 알린다.",
+      "candidate": "운영팀이 결제 오류를 확인했습니다. 원인을 조사해 7월 31일까지 결과를 안내하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:incident-zero-subject-pass",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "pass",
+        "finding_ids": [],
+        "actor_resolution": "inherited"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "incident-actor-drift",
+      "domain": "incident-notice",
+      "phenomena": ["actor_drift"],
+      "contract_id": "incident-notice-v1",
+      "source_context": "운영팀이 장애 원인을 조사하고 7월 31일까지 고객에게 결과를 알린다.",
+      "candidate": "고객이 원인을 조사해 7월 31일까지 운영팀에 알려야 합니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:incident-actor-drift",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "fail",
+        "finding_ids": ["context.actor-drift"],
+        "actor_resolution": "explicit_other"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "incident-other-antecedent",
+      "domain": "incident-notice",
+      "phenomena": ["zero_anaphora", "wrong_antecedent"],
+      "contract_id": "incident-notice-v1",
+      "source_context": "운영팀이 장애 원인을 조사하고 7월 31일까지 고객에게 결과를 알린다.",
+      "candidate": "고객이 오류를 제보했습니다. 원인을 조사해 7월 31일까지 알려야 합니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:incident-other-antecedent",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "review",
+        "finding_ids": ["context.actor-unresolved"],
+        "actor_resolution": "inherited_other"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "incident-event-omission",
+      "domain": "incident-notice",
+      "phenomena": ["event_omission"],
+      "contract_id": "incident-notice-v1",
+      "source_context": "운영팀이 장애 원인을 조사하고 7월 31일까지 고객에게 결과를 알린다.",
+      "candidate": "운영팀이 결제 오류를 확인했습니다. 7월 31일까지 결과를 안내하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:incident-event-omission",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "fail",
+        "finding_ids": ["context.event-missing"],
+        "actor_resolution": "missing"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "incident-temporal-omission",
+      "domain": "incident-notice",
+      "phenomena": ["temporal_omission"],
+      "contract_id": "incident-notice-v1",
+      "source_context": "운영팀이 장애 원인을 조사하고 7월 31일까지 고객에게 결과를 알린다.",
+      "candidate": "운영팀이 원인을 조사하고 결과를 안내하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:incident-temporal-omission",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "fail",
+        "finding_ids": ["context.time-anchor-missing"],
+        "actor_resolution": "explicit"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "incident-negation-review",
+      "domain": "incident-notice",
+      "phenomena": ["negation_scope"],
+      "contract_id": "incident-notice-v1",
+      "source_context": "운영팀이 장애 원인을 조사하고 7월 31일까지 고객에게 결과를 알린다.",
+      "candidate": "운영팀이 원인을 조사하지 않고 7월 31일까지 결과를 안내하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:incident-negation-review",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "review",
+        "finding_ids": ["context.polarity-mismatch"],
+        "actor_resolution": "explicit"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "incident-paragraph-boundary",
+      "domain": "incident-notice",
+      "phenomena": ["zero_anaphora", "paragraph_boundary"],
+      "contract_id": "incident-notice-v1",
+      "source_context": "운영팀이 장애 원인을 조사하고 7월 31일까지 고객에게 결과를 알린다.",
+      "candidate": "운영팀이 결제 오류를 확인했습니다.\n\n원인을 조사해 7월 31일까지 결과를 안내하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:incident-paragraph-boundary",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "review",
+        "finding_ids": ["context.actor-unresolved"],
+        "actor_resolution": "unresolved"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "customer-reply-explicit-pass",
+      "domain": "customer-reply",
+      "phenomena": ["explicit_actor"],
+      "contract_id": "customer-refund-v1",
+      "source_context": "고객지원팀이 결제 금액을 8월 2일까지 고객에게 환불한다.",
+      "candidate": "고객지원팀이 결제 금액을 8월 2일까지 환불하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:customer-reply-explicit-pass",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "pass",
+        "finding_ids": [],
+        "actor_resolution": "explicit"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "customer-reply-zero-subject-pass",
+      "domain": "customer-reply",
+      "phenomena": ["zero_anaphora"],
+      "contract_id": "customer-refund-v1",
+      "source_context": "고객지원팀이 결제 금액을 8월 2일까지 고객에게 환불한다.",
+      "candidate": "상담팀이 요청 내용을 확인했습니다. 결제 금액을 8월 2일까지 환불하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:customer-reply-zero-subject-pass",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "pass",
+        "finding_ids": [],
+        "actor_resolution": "inherited"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "customer-reply-actor-drift",
+      "domain": "customer-reply",
+      "phenomena": ["actor_drift"],
+      "contract_id": "customer-refund-v1",
+      "source_context": "고객지원팀이 결제 금액을 8월 2일까지 고객에게 환불한다.",
+      "candidate": "고객님이 결제 금액을 8월 2일까지 환불해야 합니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:customer-reply-actor-drift",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "fail",
+        "finding_ids": ["context.actor-drift"],
+        "actor_resolution": "explicit_other"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "customer-reply-other-antecedent",
+      "domain": "customer-reply",
+      "phenomena": ["zero_anaphora", "wrong_antecedent"],
+      "contract_id": "customer-refund-v1",
+      "source_context": "고객지원팀이 결제 금액을 8월 2일까지 고객에게 환불한다.",
+      "candidate": "고객님이 주문 번호를 보냈습니다. 결제 금액을 8월 2일까지 환불합니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:customer-reply-other-antecedent",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "review",
+        "finding_ids": ["context.actor-unresolved"],
+        "actor_resolution": "inherited_other"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "customer-reply-event-omission",
+      "domain": "customer-reply",
+      "phenomena": ["event_omission"],
+      "contract_id": "customer-refund-v1",
+      "source_context": "고객지원팀이 결제 금액을 8월 2일까지 고객에게 환불한다.",
+      "candidate": "고객지원팀이 요청 내용을 확인했습니다. 8월 2일까지 다시 안내하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:customer-reply-event-omission",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "fail",
+        "finding_ids": ["context.event-missing"],
+        "actor_resolution": "missing"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "customer-reply-temporal-omission",
+      "domain": "customer-reply",
+      "phenomena": ["temporal_omission"],
+      "contract_id": "customer-refund-v1",
+      "source_context": "고객지원팀이 결제 금액을 8월 2일까지 고객에게 환불한다.",
+      "candidate": "고객지원팀이 결제 금액을 환불하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:customer-reply-temporal-omission",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "fail",
+        "finding_ids": ["context.time-anchor-missing"],
+        "actor_resolution": "explicit"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "customer-reply-negation-review",
+      "domain": "customer-reply",
+      "phenomena": ["negation_scope"],
+      "contract_id": "customer-refund-v1",
+      "source_context": "고객지원팀이 결제 금액을 8월 2일까지 고객에게 환불한다.",
+      "candidate": "고객지원팀이 결제 금액을 8월 2일까지 환불하지 않습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:customer-reply-negation-review",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "review",
+        "finding_ids": ["context.polarity-mismatch"],
+        "actor_resolution": "explicit"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "customer-reply-paragraph-boundary",
+      "domain": "customer-reply",
+      "phenomena": ["zero_anaphora", "paragraph_boundary"],
+      "contract_id": "customer-refund-v1",
+      "source_context": "고객지원팀이 결제 금액을 8월 2일까지 고객에게 환불한다.",
+      "candidate": "상담팀이 요청 내용을 확인했습니다.\n\n결제 금액을 8월 2일까지 환불하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:customer-reply-paragraph-boundary",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "review",
+        "finding_ids": ["context.actor-unresolved"],
+        "actor_resolution": "unresolved"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "report-explicit-pass",
+      "domain": "report",
+      "phenomena": ["explicit_actor"],
+      "contract_id": "settlement-report-v1",
+      "source_context": "감사팀이 정산 오류를 확인하고 8월 5일까지 검토 결과를 보고한다.",
+      "candidate": "감사팀이 정산 오류를 확인해 8월 5일까지 결과를 보고하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:report-explicit-pass",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "pass",
+        "finding_ids": [],
+        "actor_resolution": "explicit"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "report-zero-subject-pass",
+      "domain": "report",
+      "phenomena": ["zero_anaphora"],
+      "contract_id": "settlement-report-v1",
+      "source_context": "감사팀이 정산 오류를 확인하고 8월 5일까지 검토 결과를 보고한다.",
+      "candidate": "감사팀이 정산 자료를 받았습니다. 정산 오류를 확인해 8월 5일까지 결과를 보고하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:report-zero-subject-pass",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "pass",
+        "finding_ids": [],
+        "actor_resolution": "inherited"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "report-actor-drift",
+      "domain": "report",
+      "phenomena": ["actor_drift"],
+      "contract_id": "settlement-report-v1",
+      "source_context": "감사팀이 정산 오류를 확인하고 8월 5일까지 검토 결과를 보고한다.",
+      "candidate": "협력사가 정산 오류를 확인해 8월 5일까지 결과를 보고합니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:report-actor-drift",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "fail",
+        "finding_ids": ["context.actor-drift"],
+        "actor_resolution": "explicit_other"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "report-other-antecedent",
+      "domain": "report",
+      "phenomena": ["zero_anaphora", "wrong_antecedent"],
+      "contract_id": "settlement-report-v1",
+      "source_context": "감사팀이 정산 오류를 확인하고 8월 5일까지 검토 결과를 보고한다.",
+      "candidate": "협력사가 정산 자료를 제출했습니다. 정산 오류를 확인해 8월 5일까지 결과를 보고합니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:report-other-antecedent",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "review",
+        "finding_ids": ["context.actor-unresolved"],
+        "actor_resolution": "inherited_other"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "report-event-omission",
+      "domain": "report",
+      "phenomena": ["event_omission"],
+      "contract_id": "settlement-report-v1",
+      "source_context": "감사팀이 정산 오류를 확인하고 8월 5일까지 검토 결과를 보고한다.",
+      "candidate": "감사팀이 정산 자료를 검토했습니다. 8월 5일까지 결과를 보고하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:report-event-omission",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "fail",
+        "finding_ids": ["context.event-missing"],
+        "actor_resolution": "missing"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "report-temporal-omission",
+      "domain": "report",
+      "phenomena": ["temporal_omission"],
+      "contract_id": "settlement-report-v1",
+      "source_context": "감사팀이 정산 오류를 확인하고 8월 5일까지 검토 결과를 보고한다.",
+      "candidate": "감사팀이 정산 오류를 확인하고 결과를 보고하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:report-temporal-omission",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "fail",
+        "finding_ids": ["context.time-anchor-missing"],
+        "actor_resolution": "explicit"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "report-negation-review",
+      "domain": "report",
+      "phenomena": ["negation_scope"],
+      "contract_id": "settlement-report-v1",
+      "source_context": "감사팀이 정산 오류를 확인하고 8월 5일까지 검토 결과를 보고한다.",
+      "candidate": "감사팀이 정산 오류를 확인하지 않고 8월 5일까지 결과를 보고하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:report-negation-review",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "review",
+        "finding_ids": ["context.polarity-mismatch"],
+        "actor_resolution": "explicit"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    },
+    {
+      "id": "report-paragraph-boundary",
+      "domain": "report",
+      "phenomena": ["zero_anaphora", "paragraph_boundary"],
+      "contract_id": "settlement-report-v1",
+      "source_context": "감사팀이 정산 오류를 확인하고 8월 5일까지 검토 결과를 보고한다.",
+      "candidate": "감사팀이 정산 자료를 받았습니다.\n\n정산 오류를 확인해 8월 5일까지 결과를 보고하겠습니다.",
+      "source": {
+        "kind": "first_party_synthetic",
+        "license": "Apache-2.0",
+        "reference": "hangeulint-clean-room:report-paragraph-boundary",
+        "redistribution_allowed": true
+      },
+      "gold": {
+        "status": "review",
+        "finding_ids": ["context.actor-unresolved"],
+        "actor_resolution": "unresolved"
+      },
+      "annotations": {
+        "completed_raters": 0,
+        "adjudicated": false,
+        "agreement": null
+      }
+    }
+  ]
+}

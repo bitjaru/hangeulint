@@ -1,10 +1,15 @@
 """HangeuLint: ESLint for Korean AI output."""
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 from .analyzer import analyze
 from .anchors import compare_anchors, extract_anchors
 from .context import load_context_contract, verify_context
+from .context_benchmark import (
+    build_annotation_package,
+    evaluate_context_benchmark,
+    load_context_benchmark,
+)
 from .edit_trace import build_edit_trace
 
 __all__ = [
@@ -12,6 +17,9 @@ __all__ = [
     "compare_anchors",
     "extract_anchors",
     "build_edit_trace",
+    "build_annotation_package",
+    "evaluate_context_benchmark",
     "load_context_contract",
+    "load_context_benchmark",
     "verify_context",
 ]

@@ -44,3 +44,20 @@ PYTHONPATH=src python3 scripts/run_context_benchmark.py
 문맥 이해 정확도나 경쟁 제품 대비 성능으로 홍보하면 안 된다. 대표성을 갖춘
 `KoContextBench`는 실제 문서 출처, 현상별 slice, 원어민 복수 평가와 비공개
 holdout을 별도로 가져야 한다.
+
+## KoContextBench development seed
+
+`context/seed-v0.1.json`은 3개 도메인 × 8개 문맥 현상, 총 24개의 프로젝트 자체
+제작 seed다. dataset schema, slice metric, annotation workflow를 검증하기 위한
+자료이며 사람 평가를 받지 않았다.
+
+```bash
+PYTHONPATH=src python3 scripts/run_context_calibration.py
+PYTHONPATH=src python3 -m hangeulint context-benchmark \
+  benchmarks/context/seed-v0.1.json
+```
+
+결과에는 전체 match 외에 domain/phenomenon slice, finding micro
+precision/recall과 `claim_readiness`가 포함된다. seed는 24/24가 맞더라도
+`publishable=false`다. 수집·블라인드 평가·합의도 절차는
+[`context/ANNOTATION.md`](context/ANNOTATION.md)에 기록했다.

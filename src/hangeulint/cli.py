@@ -8,6 +8,10 @@ from pathlib import Path
 from .analyzer import analyze
 from .anchors import compare_anchors
 from .context import load_context_contract, verify_context
+from .context_benchmark import (
+    evaluate_context_benchmark,
+    load_context_benchmark,
+)
 from .edit_trace import build_edit_trace
 from .evidence import load_evidence
 from .packs import available_packs
@@ -182,6 +186,13 @@ def _parser() -> argparse.ArgumentParser:
         "--context-report",
         help="finding ID를 연결할 context-check JSON 결과",
     )
+
+    context_benchmark = subparsers.add_parser(
+        "context-benchmark",
+        help="KoContextBench를 실행하고 도메인·현상 slice 평가",
+    )
+    context_benchmark.add_argument("dataset", help="KoContextBench JSON 파일")
+    context_benchmark.add_argument("--json", action="store_true", dest="as_json")
     return parser
 
 
@@ -240,6 +251,28 @@ def main(argv: list[str] | None = None) -> int:
             ).to_dict()
             print(json.dumps(trace, ensure_ascii=False, indent=2))
             return 0
+
+        if args.command == "context-benchmark":
+            benchmark = evaluate_context_benchmark(load_context_benchmark(args.dataset))
+            summary = benchmark["summary"]
+            if args.as_json:
+                print(json.dumps(benchmark, ensure_ascii=False, indent=2))
+            else:
+                print(
+                    f"CONTEXT BENCH  {benchmark['dataset_id']}  "
+                    f"matched={summary['fully_matched']}/{summary['cases']}  "
+                    f"publishable={benchmark['claim_readiness']['publishable']}"
+                )
+                for domain, metrics in benchmark["slices"]["domain"].items():
+                    print(
+                        f"- domain={domain}: "
+                        f"status={metrics['status_matches']}/{metrics['cases']} "
+                        f"findings={metrics['finding_exact_matches']}/"
+                        f"{metrics['cases']}"
+                    )
+                for blocker in benchmark["claim_readiness"]["blockers"]:
+                    print(f"- claim blocker: {blocker}")
+            return 0 if summary["fully_matched"] == summary["cases"] else 2
 
         source = _read_text(args.source)
         candidate = _read_text(args.candidate)

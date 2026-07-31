@@ -25,7 +25,7 @@ HangeuLint는 다음을 하지 않습니다.
 
 ## 현재 구현
 
-`v0.2.0`은 외부 모델을 호출하지 않는 클린룸 기반 코어입니다.
+`v0.3.0`은 외부 모델을 호출하지 않는 클린룸 기반 코어입니다.
 
 - `social`, `work-message` 유형 pack
 - 규칙마다 안정적인 ID, 적용 축, 신뢰도, 근거 ID, 실패 예시, 통과 반례
@@ -63,6 +63,8 @@ PYTHONPATH=src python3 -m hangeulint context-check \
 PYTHONPATH=src python3 -m hangeulint trace \
   examples/source.txt examples/candidate_changed.txt \
   --decision rejected
+PYTHONPATH=src python3 -m hangeulint context-benchmark \
+  benchmarks/context/seed-v0.1.json
 ```
 
 개발 설치:
@@ -101,6 +103,11 @@ PASS  context  contract=customer-incident-notice-v1  errors=0  reviews=0
 문서와 같아질 수 있고 privacy flag로 표시됩니다. Cloud 저장은 별도 동의와 보존
 정책이 필요합니다.
 
+`context-benchmark`는 전체 결과를 하나의 점수로만 보여주지 않습니다. 도메인과
+문맥 현상별 상태 일치, finding precision/recall, claim blocker를 분리합니다. 현재
+development seed는 24개 자체 제작 예문이며 사람 평가가 없어 성능 주장에는 사용할
+수 없습니다.
+
 ## 결과 예시
 
 ```text
@@ -134,6 +141,7 @@ task_fit=fail, risk=not_evaluated, fidelity=not_evaluated
 ```bash
 PYTHONPATH=src python3 scripts/run_benchmark.py
 PYTHONPATH=src python3 scripts/run_context_benchmark.py
+PYTHONPATH=src python3 scripts/run_context_calibration.py
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 ```
 

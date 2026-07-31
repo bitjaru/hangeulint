@@ -23,6 +23,12 @@
 
 ## 0.3 — KoContextBench calibration
 
+- [x] provenance·license·annotation 상태를 강제하는 dataset schema
+- [x] 도메인·현상별 slice와 finding precision/recall 측정기
+- [x] 3개 도메인 × 8개 현상의 자체 제작 development seed 24쌍
+- [x] gold를 제거한 블라인드 package와 private key 분리
+- [x] 평가 응답 schema, Fleiss kappa, adjudication queue 산출
+- [x] 표본·평가자·사전등록·holdout·재배포 조건의 claim gate
 - [ ] `customer-reply`, `incident-notice`, `report` 현상별 300쌍
 - [ ] 생략 주체, 높임 관계, 시간, 부정 범위, 인과, 인용 귀속 slice
 - [ ] 한국어 원어민 3인 독립 annotation과 adjudication

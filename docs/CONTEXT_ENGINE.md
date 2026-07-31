@@ -95,7 +95,9 @@ Core의 `trace` 명령은 원문/후보 hash와 변경 구간을 결정적으로
 
 - contract/report/edit-trace schema
 - 결정론적 resolver와 rule registry
-- clean-room benchmark와 실행기
+- provenance·license·annotation 상태가 있는 KoContextBench schema
+- domain/phenomenon slice 측정기와 clean-room development seed
+- 블라인드 annotation package, 평가 응답, 합의도 계산 도구
 
 고객 또는 Cloud 자산:
 
@@ -115,3 +117,4 @@ Core의 `trace` 명령은 원문/후보 hash와 변경 구간을 결정적으로
 - 부정 표현의 scope를 결정하지 않고 review로 보낸다.
 - 인과관계와 주장/인용 귀속은 아직 contract schema에 없다.
 - clean-room fixture 일치율은 실제 한국어 문서 정확도가 아니다.
+- development seed 24쌍은 사람 평가를 받지 않아 성능 주장에 쓸 수 없다.

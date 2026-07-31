@@ -103,3 +103,8 @@ LLM judge는 사람 평가를 대체하지 않는다.
    막거나 허용한다.
 5. `production drift`: 고객 opt-in trace에서는 원문 정확도를 공개 benchmark와 섞지
    않고 tenant별 override와 review 적중률만 집계한다.
+
+현재 `seed-v0.1`은 1단계에만 해당한다. 24개 모두 프로젝트 자체 제작 예문이며
+평가자 수는 0이다. `context-benchmark`의 `claim_readiness`는 300쌍, 원어민 3인,
+adjudication, agreement, blind review, 사전등록, 독립 holdout, 재배포 권리를 모두
+확인하기 전까지 `publishable=false`를 반환한다.
