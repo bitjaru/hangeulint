@@ -36,7 +36,16 @@
 - [ ] 공개 calibration set과 독립된 private holdout
 - [ ] 경쟁 baseline을 가린 블라인드 비교
 
-## 0.4 — Contract extractor and semantic verifier
+## 0.4 — Candidate evaluation and semantic adapter foundation
+
+- [x] provider/model/prompt/seed를 기록하는 `RewriteCandidateSet`
+- [x] 후보별 surface·fidelity·context hard gate 합성
+- [x] exact·normalized·near duplicate와 최근 출력 반복 report
+- [x] 원문·후보문을 report에 싣지 않는 privacy contract
+- [x] 변경률·문장 touch rate를 실패와 분리한 telemetry
+- [ ] 한국어 유형별 near-duplicate 임계 보정
+- [ ] Kiwi POS n-gram 기반 batch syntactic diversity adapter
+- [ ] 한국어 embedding 기반 semantic diversity adapter
 
 - [ ] source/context에서 contract 후보를 만드는 provider-neutral adapter
 - [ ] 자동 추출 결과와 사람이 승인한 contract의 diff
@@ -47,10 +56,13 @@
 
 ## 0.5 — Rewrite adapter
 
+- [ ] 실제 글에서 검토 가능한 style hypothesis 후보 추출
+- [ ] 전략별 다중 후보 생성과 generator provider adapter
 - [ ] finding span만 수정하는 국소 재작성
 - [ ] 재작성 후 pack·fidelity·context gate 재실행
 - [ ] fail-closed 결과와 사람 검토 분기
 - [ ] 모델 호출 없이 검사만 하는 기존 경로 유지
+- [ ] 합성 출력 재학습 금지와 사람 승인 trace만 쓰는 승격 gate
 
 ## Cloud private beta
 

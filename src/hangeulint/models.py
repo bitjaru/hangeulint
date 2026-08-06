@@ -184,3 +184,127 @@ class EditTrace:
             "privacy": self.privacy,
             "limitations": list(self.limitations),
         }
+
+
+@dataclass(frozen=True)
+class DiversityFinding:
+    rule_id: str
+    severity: str
+    confidence: str
+    candidate_ids: tuple[str, ...]
+    message: str
+    evidence: str
+    evidence_ids: tuple[str, ...]
+    calibration: str
+
+    def to_dict(self) -> dict[str, Any]:
+        payload = asdict(self)
+        payload["candidate_ids"] = list(self.candidate_ids)
+        payload["evidence_ids"] = list(self.evidence_ids)
+        return payload
+
+
+@dataclass(frozen=True)
+class CandidatePairMetric:
+    left_candidate_id: str
+    right_candidate_id: str
+    normalized_equal: bool
+    token_jaccard: float
+    char_3gram_jaccard: float
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class DiversityReport:
+    schema_version: str
+    engine_version: str
+    status: str
+    requires_review: bool
+    candidate_ids: tuple[str, ...]
+    findings: tuple[DiversityFinding, ...]
+    pairwise: tuple[CandidatePairMetric, ...]
+    metrics: dict[str, Any]
+    privacy: dict[str, bool]
+    limitations: tuple[str, ...]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": self.schema_version,
+            "engine_version": self.engine_version,
+            "status": self.status,
+            "requires_review": self.requires_review,
+            "candidate_ids": list(self.candidate_ids),
+            "findings": [finding.to_dict() for finding in self.findings],
+            "pairwise": [pair.to_dict() for pair in self.pairwise],
+            "metrics": self.metrics,
+            "privacy": self.privacy,
+            "limitations": list(self.limitations),
+        }
+
+
+@dataclass(frozen=True)
+class RewriteCandidateEvaluation:
+    candidate_id: str
+    strategy: str
+    hypothesis_ids: tuple[str, ...]
+    generator: dict[str, Any]
+    candidate_sha256: str
+    status: str
+    eligible: bool
+    requires_review: bool
+    gates: dict[str, str]
+    finding_ids: dict[str, tuple[str, ...]]
+    metrics: dict[str, float]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "candidate_id": self.candidate_id,
+            "strategy": self.strategy,
+            "hypothesis_ids": list(self.hypothesis_ids),
+            "generator": self.generator,
+            "candidate_sha256": self.candidate_sha256,
+            "status": self.status,
+            "eligible": self.eligible,
+            "requires_review": self.requires_review,
+            "gates": self.gates,
+            "finding_ids": {
+                name: list(values) for name, values in self.finding_ids.items()
+            },
+            "metrics": self.metrics,
+        }
+
+
+@dataclass(frozen=True)
+class RewriteCandidateSetReport:
+    schema_version: str
+    engine_version: str
+    set_id: str
+    source_sha256: str
+    pack: str
+    contract_id: str | None
+    passed: bool
+    gate: dict[str, Any]
+    eligible_candidate_ids: tuple[str, ...]
+    candidates: tuple[RewriteCandidateEvaluation, ...]
+    diversity: DiversityReport
+    privacy: dict[str, bool]
+    limitations: tuple[str, ...]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": self.schema_version,
+            "engine_version": self.engine_version,
+            "set_id": self.set_id,
+            "source_sha256": self.source_sha256,
+            "pack": self.pack,
+            "contract_id": self.contract_id,
+            "passed": self.passed,
+            "gate": self.gate,
+            "eligible_candidate_ids": list(self.eligible_candidate_ids),
+            "candidates": [candidate.to_dict() for candidate in self.candidates],
+            "diversity": self.diversity.to_dict(),
+            "privacy": self.privacy,
+            "limitations": list(self.limitations),
+        }

@@ -8,6 +8,7 @@
 - 명시적 KoContextContract와 결정론적 document-level verifier
 - KoEditTrace 스키마와 로컬 diff 생성기
 - KoContextBench schema, slice evaluator, annotation 도구
+- RewriteCandidateSet·DiversityReport schema와 provider-neutral 후보 평가기
 - CLI, SDK, CI 통합
 - 공개 fixture와 벤치마크 실행기
 - 자체 호스팅 가능한 기본 API 계약

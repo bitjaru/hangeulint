@@ -1,0 +1,65 @@
+{
+  "schema_version": "0.1",
+  "rules": [
+    {
+      "id": "rewrite.candidate-exact-duplicate",
+      "severity": "review",
+      "confidence": "high",
+      "description": "서로 다른 후보 ID의 원문자열이 완전히 같다.",
+      "evidence_ids": ["HGL-REF-008"],
+      "failing_example": "후보 A와 후보 B가 모두 '오늘 결과를 공유하겠습니다.'다.",
+      "passing_example": "후보 A는 일정 중심, 후보 B는 조치 중심으로 사실을 보존해 다르게 쓴다.",
+      "calibration": "deterministic"
+    },
+    {
+      "id": "rewrite.candidate-normalized-duplicate",
+      "severity": "review",
+      "confidence": "high",
+      "description": "공백·문장부호·대소문자를 정규화하면 후보가 같다.",
+      "evidence_ids": ["HGL-REF-008"],
+      "failing_example": "'오늘 공유합니다.'와 '오늘  공유합니다'만 후보로 제시한다.",
+      "passing_example": "동일 사실을 유지하되 문장 구조와 정보 순서가 다른 후보를 제시한다.",
+      "calibration": "deterministic"
+    },
+    {
+      "id": "rewrite.candidate-near-duplicate",
+      "severity": "review",
+      "confidence": "medium",
+      "description": "후보 간 token과 문자 3-gram 중복이 보정 전 임계값을 함께 넘는다.",
+      "evidence_ids": ["HGL-REF-008"],
+      "failing_example": "한두 어절만 바꾼 후보 여러 개를 서로 다른 대안으로 제시한다.",
+      "passing_example": "사실은 같지만 초점·정보 순서·문장 결합 방식이 다른 후보를 제시한다.",
+      "calibration": "telemetry_only"
+    },
+    {
+      "id": "rewrite.recent-output-duplicate",
+      "severity": "review",
+      "confidence": "high",
+      "description": "후보가 최근 출력과 정규화 기준으로 같다.",
+      "evidence_ids": ["HGL-REF-008"],
+      "failing_example": "서로 다른 고객 답변을 최근 답변과 같은 문장으로 생성한다.",
+      "passing_example": "공통 정책을 지키면서 사건과 독자에 맞게 표현을 구성한다.",
+      "calibration": "deterministic"
+    },
+    {
+      "id": "rewrite.recent-output-near-duplicate",
+      "severity": "review",
+      "confidence": "medium",
+      "description": "후보가 최근 출력과 보정 전 어휘·문자 유사도 임계값을 함께 넘는다.",
+      "evidence_ids": ["HGL-REF-008"],
+      "failing_example": "최근 출력의 명사만 바꾸고 나머지 문장 골격을 반복한다.",
+      "passing_example": "최근 출력과 다른 정보 배열과 문장 리듬을 사용한다.",
+      "calibration": "telemetry_only"
+    },
+    {
+      "id": "rewrite.strategy-collapse",
+      "severity": "info",
+      "confidence": "medium",
+      "description": "여러 후보의 생성 전략 식별자가 모두 같다.",
+      "evidence_ids": ["HGL-REF-008", "HGL-REF-013"],
+      "failing_example": "후보 네 개를 모두 minimal-edit 전략으로만 생성한다.",
+      "passing_example": "minimal-edit, direct, warm 같은 명시적 전략으로 후보 공간을 나눈다.",
+      "calibration": "audit_only"
+    }
+  ]
+}

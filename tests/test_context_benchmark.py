@@ -56,7 +56,7 @@ class ContextBenchmarkTests(unittest.TestCase):
         dataset = load_context_benchmark(_SEED_PATH)
         report = evaluate_context_benchmark(dataset)
         self.assertEqual(report["summary"]["cases"], 24)
-        self.assertEqual(report["engine_version"], "0.3.0")
+        self.assertEqual(report["engine_version"], "0.4.0")
         self.assertEqual(report["summary"]["fully_matched"], 24)
         self.assertFalse(report["claim_readiness"]["publishable"])
         self.assertEqual(

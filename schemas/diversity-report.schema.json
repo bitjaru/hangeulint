@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bitjaru/hangeulint/schemas/diversity-report.schema.json",
+  "title": "HangeuLint rewrite diversity report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "engine_version",
+    "status",
+    "requires_review",
+    "candidate_ids",
+    "findings",
+    "pairwise",
+    "metrics",
+    "privacy",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "engine_version": {"type": "string", "minLength": 1},
+    "status": {"enum": ["not_evaluated", "observed", "review"]},
+    "requires_review": {"type": "boolean"},
+    "candidate_ids": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rule_id",
+          "severity",
+          "confidence",
+          "candidate_ids",
+          "message",
+          "evidence",
+          "evidence_ids",
+          "calibration"
+        ],
+        "properties": {
+          "rule_id": {"type": "string", "minLength": 1},
+          "severity": {"enum": ["info", "review", "error"]},
+          "confidence": {"enum": ["low", "medium", "high"]},
+          "candidate_ids": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          },
+          "message": {"type": "string", "minLength": 1},
+          "evidence": {"type": "string"},
+          "evidence_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "calibration": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "pairwise": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "left_candidate_id",
+          "right_candidate_id",
+          "normalized_equal",
+          "token_jaccard",
+          "char_3gram_jaccard"
+        ],
+        "properties": {
+          "left_candidate_id": {"type": "string", "minLength": 1},
+          "right_candidate_id": {"type": "string", "minLength": 1},
+          "normalized_equal": {"type": "boolean"},
+          "token_jaccard": {"type": "number", "minimum": 0, "maximum": 1},
+          "char_3gram_jaccard": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "metrics": {"type": "object"},
+    "privacy": {
+      "type": "object",
+      "required": [
+        "persisted_by_core",
+        "contains_candidate_text",
+        "contains_recent_output_text"
+      ],
+      "properties": {
+        "persisted_by_core": {"const": false},
+        "contains_candidate_text": {"const": false},
+        "contains_recent_output_text": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "limitations": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "additionalProperties": false
+}

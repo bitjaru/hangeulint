@@ -188,6 +188,69 @@
       "artifact_license": "paper CC-BY-4.0; no artifacts vendored"
     },
     {
+      "id": "HGL-REF-013",
+      "title": "HyPerAlign: Hypotheses-driven Personalized Alignment",
+      "year": 2025,
+      "url": "https://arxiv.org/abs/2505.00038",
+      "basis": "research-preprint",
+      "supports": [
+        "Few-shot writing samples can be distilled into explicit style and communication hypotheses before generation.",
+        "Interpretable user-specific hypotheses offer an alternative to optimizing for an average user voice."
+      ],
+      "limitations": [
+        "The reported tasks and languages do not constitute a Korean rewriting benchmark.",
+        "No upstream implementation is vendored into HangeuLint."
+      ],
+      "artifact_license": "citation and method only; no artifacts vendored"
+    },
+    {
+      "id": "HGL-TOOL-002",
+      "title": "Humanize KR: Korean AI-style editing skill",
+      "year": 2026,
+      "url": "https://github.com/epoko77-ai/im-not-ai",
+      "basis": "open-source-method-review",
+      "supports": [
+        "Korean editing can separate diagnosis, localized rewriting, change telemetry, and post-rewrite gates.",
+        "Author voice overrides need explicit scope and regression checks."
+      ],
+      "limitations": [
+        "Its project-specific taxonomy and thresholds are not HangeuLint accuracy evidence.",
+        "AI-tell severity labels must not become authorship claims in HangeuLint."
+      ],
+      "artifact_license": "MIT upstream; method reviewed, no source copied"
+    },
+    {
+      "id": "HGL-TOOL-003",
+      "title": "AlignScore: Evaluating Factual Consistency with a Unified Alignment Function",
+      "year": 2023,
+      "url": "https://github.com/yuh-zha/AlignScore",
+      "basis": "open-source-model-review",
+      "supports": [
+        "A model-based factual consistency adapter can compare whether candidate information is supported by source context."
+      ],
+      "limitations": [
+        "The released evaluator is not calibrated for Korean HangeuLint domains.",
+        "It cannot replace deterministic anchors or human evaluation."
+      ],
+      "artifact_license": "MIT upstream; optional adapter candidate, not vendored"
+    },
+    {
+      "id": "HGL-TOOL-004",
+      "title": "humanize: research-grounded LLM-agnostic writing skills",
+      "year": 2026,
+      "url": "https://github.com/harshaneel/humanize",
+      "basis": "open-source-method-review",
+      "supports": [
+        "Detection, rewriting, voice hypothesis extraction, and final audit should be explicit stages.",
+        "A best-of-N workflow needs independent substance verification because repeated paraphrasing can drift."
+      ],
+      "limitations": [
+        "The rulebook is predominantly English-specific and cannot be imported as Korean thresholds.",
+        "Its detector-oriented signals are not evidence of authorship or Korean quality."
+      ],
+      "artifact_license": "MIT upstream; method reviewed, no source copied"
+    },
+    {
       "id": "HGL-TOOL-001",
       "title": "Kiwipiepy: Python API for Kiwi",
       "year": 2026,

@@ -15,6 +15,7 @@ from .context_benchmark import (
 from .edit_trace import build_edit_trace
 from .evidence import load_evidence
 from .packs import available_packs
+from .rewrite import evaluate_rewrite_candidates, load_rewrite_candidate_set
 
 
 def _read_text(path: str) -> str:
@@ -99,6 +100,29 @@ def _print_context_report(report: dict) -> None:
             f"- [resolved] {event['event_id']}: "
             f"actor={actor}/{event['actor_resolution']} "
             f"sentence={event['sentence_index']}"
+        )
+
+
+def _print_rewrite_report(report: dict) -> None:
+    state = "PASS" if report["passed"] else "FAIL"
+    print(
+        f"{state}  rewrite  set={report['set_id']}  "
+        f"eligible={report['gate']['eligible']}/{report['gate']['candidates']}  "
+        f"diversity={report['diversity']['status']}"
+    )
+    for candidate in report["candidates"]:
+        print(
+            f"- [{candidate['status']}] {candidate['candidate_id']} "
+            f"strategy={candidate['strategy']} "
+            f"surface={candidate['gates']['surface']} "
+            f"fidelity={candidate['gates']['fidelity']} "
+            f"context={candidate['gates']['context']}"
+        )
+    for finding in report["diversity"]["findings"]:
+        joined = ",".join(finding["candidate_ids"])
+        print(
+            f"- [{finding['severity']}/{finding['confidence']}] "
+            f"{finding['rule_id']} candidates={joined}: {finding['message']}"
         )
 
 
@@ -193,6 +217,50 @@ def _parser() -> argparse.ArgumentParser:
     )
     context_benchmark.add_argument("dataset", help="KoContextBench JSON 파일")
     context_benchmark.add_argument("--json", action="store_true", dest="as_json")
+
+    rewrite_evaluate = subparsers.add_parser(
+        "rewrite-evaluate",
+        help="여러 수정 후보의 hard gate와 묶음 다양성 검사",
+    )
+    rewrite_evaluate.add_argument("source", help="수정 전 원문 UTF-8 파일")
+    rewrite_evaluate.add_argument(
+        "candidate_set",
+        help="rewrite candidate set JSON 파일",
+    )
+    rewrite_evaluate.add_argument("--pack", default="social", choices=available_packs())
+    rewrite_evaluate.add_argument(
+        "--morphology",
+        default="none",
+        choices=("none", "kiwi"),
+        help="선택 형태소 텔레메트리 backend",
+    )
+    rewrite_evaluate.add_argument(
+        "--protect",
+        action="append",
+        default=[],
+        help="모든 후보에서 반드시 보존할 용어(반복 지정 가능)",
+    )
+    rewrite_evaluate.add_argument(
+        "--contract",
+        help="모든 후보에 적용할 문맥 계약 JSON 파일",
+    )
+    rewrite_evaluate.add_argument(
+        "--recent-output",
+        action="append",
+        default=[],
+        help="묶음 반복 비교에 쓸 최근 출력 파일(반복 지정 가능)",
+    )
+    rewrite_evaluate.add_argument(
+        "--strict-review",
+        action="store_true",
+        help="fidelity/context review 후보도 eligible에서 제외",
+    )
+    rewrite_evaluate.add_argument(
+        "--strict-diversity",
+        action="store_true",
+        help="보정 전 다양성 review도 candidate set 실패로 처리",
+    )
+    rewrite_evaluate.add_argument("--json", action="store_true", dest="as_json")
     return parser
 
 
@@ -273,6 +341,33 @@ def main(argv: list[str] | None = None) -> int:
                 for blocker in benchmark["claim_readiness"]["blockers"]:
                     print(f"- claim blocker: {blocker}")
             return 0 if summary["fully_matched"] == summary["cases"] else 2
+
+        if args.command == "rewrite-evaluate":
+            set_id, candidates = load_rewrite_candidate_set(
+                _read_json(args.candidate_set)
+            )
+            contract = (
+                load_context_contract(_read_json(args.contract))
+                if args.contract
+                else None
+            )
+            report = evaluate_rewrite_candidates(
+                _read_text(args.source),
+                set_id,
+                candidates,
+                pack_id=args.pack,
+                morphology=args.morphology,
+                protected_terms=args.protect,
+                context_contract=contract,
+                recent_outputs=tuple(_read_text(path) for path in args.recent_output),
+                strict_review=args.strict_review,
+                strict_diversity=args.strict_diversity,
+            ).to_dict()
+            if args.as_json:
+                print(json.dumps(report, ensure_ascii=False, indent=2))
+            else:
+                _print_rewrite_report(report)
+            return 0 if report["passed"] else 2
 
         source = _read_text(args.source)
         candidate = _read_text(args.candidate)

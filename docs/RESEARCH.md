@@ -92,6 +92,18 @@ v0.1은 이 방향의 하한선으로 수치·날짜·URL·식별자를 유형�
 따라서 향후 judge는 결정론적 코어와 분리하고, 후보 위치 교환, 반복 안정성,
 원어민 평가와의 보정을 통과한 경우에만 보조 신호로 쓴다.
 
+### 6. 평균 말투 대신 검토 가능한 style hypothesis를 쓴다
+
+HyPerAlign은 소수의 사용자 글에서 communication strategy와 writing style 가설을
+먼저 추출한 뒤 개인화에 사용하는 방식을 제안한다. HangeuLint는 이 아이디어를
+한국어 품질 수치로 직접 전용하지 않고, 생성 후보가 어떤 가설을 사용했는지
+`hypothesis_ids`로 감사 가능하게 만드는 데 적용한다.
+
+- Garbacea & Tan (2025), [HyPerAlign](https://arxiv.org/abs/2505.00038)
+
+한국어·범용 humanizer와 factual consistency 오픈소스의 구현·라이선스·도입 경계는
+[OPEN_SOURCE_METHODS.md](OPEN_SOURCE_METHODS.md)에 별도로 기록한다.
+
 ## 도구와 라이선스 결정
 
 - HangeuLint Core와 자체 fixture: Apache-2.0.

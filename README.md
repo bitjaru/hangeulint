@@ -25,7 +25,7 @@ HangeuLint는 다음을 하지 않습니다.
 
 ## 현재 구현
 
-`v0.3.0`은 외부 모델을 호출하지 않는 클린룸 기반 코어입니다.
+`v0.4.0`은 외부 모델을 호출하지 않는 클린룸 기반 코어입니다.
 
 - `social`, `work-message` 유형 pack
 - 규칙마다 안정적인 ID, 적용 축, 신뢰도, 근거 ID, 실패 예시, 통과 반례
@@ -35,6 +35,11 @@ HangeuLint는 다음을 하지 않습니다.
 - 같은 문단 안의 제한된 한국어 생략 주체 상속
 - 주체 변경, 필수 사건·시간 누락, 부정 여부 변화의 국소 finding
 - 원문–후보 변경과 사람 채택 상태를 연결하는 무저장 `KoEditTrace`
+- provider/model/prompt/seed를 기록하는 `RewriteCandidateSet`
+- 후보마다 surface·fidelity·context hard gate를 다시 실행하는 평가기
+- 후보끼리와 최근 출력의 exact·normalized·near duplicate를 분리하는
+  `DiversityReport`
+- 변경률과 원문 문장 touch rate의 보정 전 telemetry
 - 쉼표 분포와 종결 방식 텔레메트리
 - 선택형 Kiwi 형태소 텔레메트리
 - JSON schema version, CI 종료 코드, 근거 목록 CLI
@@ -46,6 +51,8 @@ HangeuLint는 다음을 하지 않습니다.
 - 원문에서 context contract 자동 추출
 - 완전한 문장 단위 의미 동등성·인과·인용 귀속 판정
 - 자동 재작성
+- 자동 최우수 후보 선택
+- 보정된 의미·구문 다양성 판정
 - 대표 말뭉치에서 보정된 성능 수치
 
 ## 실행
@@ -65,6 +72,9 @@ PYTHONPATH=src python3 -m hangeulint trace \
   --decision rejected
 PYTHONPATH=src python3 -m hangeulint context-benchmark \
   benchmarks/context/seed-v0.1.json
+PYTHONPATH=src python3 -m hangeulint rewrite-evaluate \
+  examples/source.txt examples/rewrite-candidates.json \
+  --pack work-message --json
 ```
 
 개발 설치:
@@ -108,6 +118,13 @@ PASS  context  contract=customer-incident-notice-v1  errors=0  reviews=0
 development seed는 24개 자체 제작 예문이며 사람 평가가 없어 성능 주장에는 사용할
 수 없습니다.
 
+`rewrite-evaluate`는 문장을 생성하지 않습니다. 외부 모델이나 사람이 만든 여러
+후보를 받아 후보별 hard gate를 실행한 뒤, 통과 후보끼리와 `--recent-output`으로
+전달한 최근 출력의 반복을 측정합니다. 출력 report에는 원문과 후보문을 넣지 않고
+hash, rule ID, gate 상태, 유사도 telemetry만 남깁니다. `--strict-diversity`는 현재
+보정 전 near-duplicate 신호까지 실패로 처리하므로 실험·CI에서 명시적으로 선택해야
+합니다.
+
 ## 결과 예시
 
 ```text
@@ -133,7 +150,8 @@ task_fit=fail, risk=not_evaluated, fidelity=not_evaluated
 전체 문헌, 적용 범위, 라이선스 검토는
 [docs/RESEARCH.md](docs/RESEARCH.md), 평가 계획은
 [docs/EVALUATION.md](docs/EVALUATION.md), 문맥 엔진 계약은
-[docs/CONTEXT_ENGINE.md](docs/CONTEXT_ENGINE.md)에 기록했습니다. 런타임에서는
+[docs/CONTEXT_ENGINE.md](docs/CONTEXT_ENGINE.md), 오픈소스 방법론 비교는
+[docs/OPEN_SOURCE_METHODS.md](docs/OPEN_SOURCE_METHODS.md)에 기록했습니다. 런타임에서는
 `hangeulint evidence`로 동일한 근거 레지스트리를 조회할 수 있습니다.
 
 ## 검증

@@ -90,6 +90,32 @@ entity(actor) ──performs──> event(action)
 
 결정론적 결과와 모델 점수를 하나로 평균내지 않는다.
 
+### Tier 4 — provider-neutral rewrite candidate evaluation
+
+Core는 모델을 직접 호출하지 않는다. 생성 adapter는 전략과 재현 메타데이터가 붙은
+후보 묶음을 만들고 Core는 각 후보에 기존 gate를 다시 실행한다.
+
+```text
+RewriteCandidateSet
+  ├── candidate id / strategy / hypothesis ids
+  ├── provider / model / prompt version / seed
+  └── raw candidate text (local input only)
+        │
+        ├── surface pack
+        ├── source fidelity
+        ├── optional context contract
+        └── eligible / review / rejected
+              │
+              └── DiversityReport
+                    ├── candidate pair overlap
+                    ├── recent-output overlap
+                    └── strategy audit
+```
+
+report에는 원문·후보·최근 출력 전체를 넣지 않는다. exact·normalized duplicate는
+결정적 신호이고 near-duplicate는 보정 전 telemetry다. 의미·구문 다양성과 자동
+최종 후보 선택은 아직 평가하지 않는다.
+
 ## 코드 구조
 
 ```text
@@ -100,6 +126,8 @@ src/hangeulint/
 ├── context.py       # 명시적 문맥 계약과 document-level event 연결
 ├── context_rules.py # 문맥 rule registry 검증
 ├── edit_trace.py    # 로컬·결정적 KoEditTrace 생성
+├── rewrite.py       # 후보별 hard gate와 묶음 반복 telemetry
+├── rewrite_rules.py # rewrite/diversity rule registry 검증
 ├── evidence.py      # 근거 레지스트리 로더와 검증
 ├── models.py        # schema-versioned 결과 계약
 ├── packs.py         # 규칙 schema와 pack 합성

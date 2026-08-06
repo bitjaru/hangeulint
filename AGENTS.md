@@ -22,5 +22,7 @@
 PYTHONPATH=src python3 scripts/run_benchmark.py
 PYTHONPATH=src python3 scripts/run_context_benchmark.py
 PYTHONPATH=src python3 scripts/run_context_calibration.py
+PYTHONPATH=src python3 -m hangeulint rewrite-evaluate \
+  examples/source.txt examples/rewrite-candidates.json --pack work-message --json
 python3 -m unittest discover -s tests -v
 ```
